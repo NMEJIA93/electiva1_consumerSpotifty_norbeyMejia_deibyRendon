@@ -1,29 +1,29 @@
 import React from 'react'
-import { useNavigate } from 'react-router-dom';
+
+import { Navbar } from '../components/Navbar';
+import { Hero } from '../components/Hero';
+
+import Fondo from '../../assets/FondoMusica.jpg'
 
 export const HomePage = () => {
 
-    const navigate = useNavigate();
-
-    const onLoginUser = (target) => {
-
-        navigate('/login', { replace: true });
-
+    const bgImagen = {
+        backgroundImage: `url(${Fondo})`,
+        backgroundRepeat: 'no-repeat',
+        backgroundSize: 'cover',
+        backgroundPosition: 'bottom',
+        position: 'relative'
     }
 
     return (
-        <div>
-            <h1 className="text-3xl font-bold underline text-blue-500">
-                Hello world!
-            </h1>
-            <i className="bi bi-0-circle"></i>
-
-            <div>
-                <h1>login</h1>
-                <button
-                    onClick={onLoginUser}>ir a login</button>
+        <>
+            <div style ={bgImagen} className="overflow-hidden min-h-screen">
+                <div>
+                    <Navbar />
+                    <Hero />
+                </div>
             </div>
-        </div>
+        </>
     )
 }
 
