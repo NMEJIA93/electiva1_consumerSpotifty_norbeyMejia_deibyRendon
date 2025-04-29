@@ -23,7 +23,7 @@ export const Navbar = () => {
     const navigate = useNavigate();
 
     return (
-        <nav className='bg-green-300 fixed top-0 left-0 w-full bg-opacity-60 backdrop-blur-md z-50'>
+        <nav className='bg-blue-300 fixed top-0 left-0 w-full bg-opacity-5 backdrop-blur-md z-50'>
             <div className='flex justify-between items-center sm:px-12 sm:py-6 px-4 py-3'>
                 <div>
                     <img src={IconSpotify} alt="Logo Spotify" className='w-[100px]' />
