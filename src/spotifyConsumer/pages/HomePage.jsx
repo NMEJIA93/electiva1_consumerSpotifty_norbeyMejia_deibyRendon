@@ -11,7 +11,7 @@ export const HomePage = () => {
         backgroundImage: `url(${Fondo})`,
         backgroundRepeat: 'no-repeat',
         backgroundSize: 'cover',
-        backgroundPosition: 'bootom',
+        backgroundPosition: 'bottom',
         position: 'relative'
     }
 

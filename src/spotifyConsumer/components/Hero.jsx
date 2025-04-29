@@ -17,7 +17,7 @@ export const Hero = () => {
             mientras desvelas secretos ocultos y te conviertes en el
             héroe supremo. ¡La magia está en tus manos!
           </p>
-          <div className='flex justify-centers gap-4'>
+          <div className='flex justify-center gap-4'>
             <a className='bg-blue-500 py-2 px-12 rounded-3xl text-white
             hover:bg-blue-700 transition-all duration-300 items-center cursor-pointer'>
               ir a Spotify 
