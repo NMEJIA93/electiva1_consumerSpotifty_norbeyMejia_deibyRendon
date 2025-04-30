@@ -22,7 +22,7 @@ const navbarlinks = [
 ]
 
 
-export const Navbar = () => {
+export const PublicNavbar = () => {
     const navigate = useNavigate();
     const [isOpen, setIsOpen] = useState(false);
   

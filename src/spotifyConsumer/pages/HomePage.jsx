@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { Navbar } from '../components/Navbar';
+import { PublicNavbar } from '../components/PublicNavbar';
 import { Hero } from '../components/Hero';
 
 import Bacground from '../../assets/backgroundGreen.png'
@@ -17,7 +17,7 @@ export const HomePage = () => {
         <>
             <div className="relative overflow-hidden min-h-screen bg-green-700">
                 <div style={bgImage} className="relative z-10 min-h-screen">
-                    <Navbar />
+                    <PublicNavbar />
                     <Hero />
                 </div>
             </div>
