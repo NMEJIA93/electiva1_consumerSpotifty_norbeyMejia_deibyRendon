@@ -4,6 +4,7 @@ import { PublicNavbar } from '../components/PublicNavbar';
 import { Hero } from '../components/Hero';
 
 import Bacground from '../../assets/backgroundGreen.png'
+import { PrivateNavbar } from '../components/PrivateNavbar';
 
 export const HomePage = () => {
     const bgImage = {
