@@ -19,9 +19,8 @@ export const PrivateNavbar = () => {
     const toggleMenu = () => setIsOpen(!isOpen);
 
     return (
-        <nav className="bg-black fixed top-0 left-0 w-full bg-opacity-90 backdrop-blur-md z-50">
+        <nav className=" bg-black  top-0 left-0 w-full bg-opacity-90 backdrop-blur-md z-50 ">
             <div className="flex justify-between items-center sm:px-12 sm:py-6 px-4 py-3">
-                {/* Logo */}
                 <div>
                     <img src={IconSpotify} alt="Logo Spotify" className="w-[100px]" />
                 </div>

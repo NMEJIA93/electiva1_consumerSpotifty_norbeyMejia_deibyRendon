@@ -8,5 +8,19 @@ export default {
     extend: {},
   },
   plugins: [],
+
+  theme: {
+    extend: {
+      colors: {
+        spotify: {
+          green: '#1DB954',
+          black: '#191414',
+          gray: '#B3B3B3',
+          darkGray: '#282828',
+        },
+      },
+    },
+  },
+
 }
 
