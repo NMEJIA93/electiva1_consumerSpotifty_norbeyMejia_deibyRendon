@@ -28,11 +28,7 @@ export const LoginPage = () => {
             <div className="bg-spotify-darkGray p-6 rounded-lg shadow-lg w-full max-w-md">
                 <h1 className="text-3xl font-bold mb-8 text-center">Iniciar Sesión</h1>
                 <div className="space-y-4">
-
-
-                    {/* Formulario para iniciar sesión como usuario */}
                     <div>
-                        <h2 className="text-xl font-semibold mb-4">Iniciar sesión como Usuario</h2>
                         <div className="space-y-4">
                             <input
                                 type="email"
@@ -54,6 +50,7 @@ export const LoginPage = () => {
                             >
                                 Iniciar sesión
                             </button>
+
                             <button
                                 onClick={onCancel}
                                 className="w-full py-2 bg-gray-700 hover:bg-gray-800 text-white rounded-lg transition-all"
@@ -61,25 +58,25 @@ export const LoginPage = () => {
                                 Cancelar
                             </button>
                         </div>
+                        <div className="flex items-center justify-center my-4">
+                            <div className="flex-grow border-t border-gray-400"></div>
+                            <span className="px-4 text-gray-400">OR</span>
+                            <div className="flex-grow border-t border-gray-400"></div>
+                        </div>
                     </div>
-                    {/* Botón para iniciar sesión con Google */}
-                    
-                        
-                        <button
-                            onClick={onLoginWithGoogle}
-                            className="w-full py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg transition-all"
-                        >
-                            <i class="bi bi-google"></i>
-                            Iniciar sesión con Google
-
-                        </button>
-                    
-
+                    <button
+                        onClick={onLoginWithGoogle}
+                        className="w-full py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg transition-all"
+                    >
+                        <i class="bi bi-google mr-3"></i>
+                        Google
+                    </button>
                     {/* Botón para iniciar sesión con Spotify */}
                     <button
                         onClick={onLoginWithSpotify}
-                        className="w-full py-2 bg-spotify-green hover:bg-green-600 text-black rounded-lg transition-all"
+                        className="w-full py-2 bg-spotify-green hover:bg-green-600 text-white rounded-lg transition-all"
                     >
+                        <i class="bi bi-spotify mr-3"></i>
                         Iniciar sesión con Spotify
                     </button>
                 </div>

@@ -1,4 +1,4 @@
-import Bacground from '../../assets/backgroundGreen.png'
+import Bacground from '../../assets/bgImage.png'
 
 import { PublicNavbar } from '../components/PublicNavbar';
 import { Hero } from '../components/Hero';
@@ -14,9 +14,9 @@ export const HomePage = () => {
 
     return (
         <>
-            <div className="relative overflow-hidden min-h-screen bg-green-700">
+            <div className="relative overflow-hidden min-h-screen bg-spotify-green">
                 <div style={bgImage} className="relative z-10 min-h-screen">
-                    <PublicNavbar />
+                    <PublicNavbar/>
                     <Hero />
                 </div>
             </div>
