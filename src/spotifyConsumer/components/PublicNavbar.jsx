@@ -15,9 +15,10 @@ const navbarlinks = [
     {
         id: 2,
         title: 'Register',
-        link: '/',
+        link: '/register',
         //icon: 'bi bi-linkedin'
     },
+
 
 ]
 
