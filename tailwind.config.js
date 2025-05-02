@@ -14,7 +14,7 @@ export default {
       colors: {
         spotify: {
           green: '#1ED760',
-          black: '#191414',
+          black: '#121212',
           gray: '#B3B3B3',
           darkGray: '#282828',
         },

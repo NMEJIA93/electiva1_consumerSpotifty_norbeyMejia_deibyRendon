@@ -1,12 +1,12 @@
-import Bacground from '../../assets/backgroundGreen.png'
 
+import ProfileMock from '../../assets/profileMock.png'
 import { PrivateNavbar } from '../components/PrivateNavbar'
 import { BodyUserPage } from '../components/BodyUserPage'
 
 const user = {
     firstName: 'Juan',
     lastName: 'Pérez',
-    profilePicture: 'https://via.placeholder.com/150',
+    profilePicture: ProfileMock,
 };
 
 const ownPlaylists = [
@@ -20,24 +20,14 @@ const sharedPlaylists = [
 ];
 
 export const UserPage = () => {
-    const bgImage = {
-        backgroundImage: `url(${Bacground})`,
-        backgroundRepeat: 'no-repeat',
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-    };
 
     return (
         <>
-            {/* Navbar fijo */}
             <div className="relative z-50">
                 <PrivateNavbar />
             </div>
-
-            {/* Contenido principal */}
             <div
-                style={bgImage}
-                className="relative overflow-hidden min-h-screen bg-green-700 "
+                className="relative overflow-hidden min-h-screen bg-spotify-green "
             >
                 <BodyUserPage
                     user={user}
