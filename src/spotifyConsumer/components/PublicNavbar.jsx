@@ -7,8 +7,7 @@ import { MobileMenu } from './MobileMenu'
 
 const navbarlinks = [
   { id: 1, title: 'Login', link: '/login' },
-  { id: 2, title: 'Register', link: '/'},
-
+  { id: 2, title: 'Register', link: '/register'},
 ]
 
 export const PublicNavbar = () => {
