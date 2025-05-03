@@ -5,14 +5,6 @@ import { Hero } from '../components/Hero';
 
 
 export const HomePage = () => {
-    const bgImage = {
-        backgroundImage: `url(${Bacground})`,
-        backgroundRepeat: 'no-repeat',
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-    };
-
-
     return (
         <>
             <div className="relative overflow-hidden min-h-screen bg-spotify-green">

@@ -1,6 +1,8 @@
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 
+import bgBackground from '../../assets/bgBlackColor.png'
+
 export const LoginPage = () => {
     const navigate = useNavigate();
     const [email, setEmail] = useState('');
@@ -24,7 +26,10 @@ export const LoginPage = () => {
     };
 
     return (
-        <div className="min-h-screen flex flex-col items-center justify-center bg-spotify-green text-white">
+        <div 
+        className="min-h-screen flex flex-col items-center justify-center bg-spotify-black text-white"
+        style={{ backgroundImage: `url(${bgBackground})` }}
+        >
             <div className="bg-spotify-darkGray p-6 rounded-lg shadow-lg w-full max-w-md">
                 <h1 className="text-3xl font-bold mb-8 text-center">Iniciar Sesión</h1>
                 <div className="space-y-4">

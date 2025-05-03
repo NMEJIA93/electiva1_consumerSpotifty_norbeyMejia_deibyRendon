@@ -2,7 +2,7 @@
 
 export const Hero = () => {
   return (
-    <section className="mt-36">
+    <section className="mt-24">
       <div className="grid grid-cols-1 md:grid-cols-2 items-center">
         <div className="p-10 md:p-16 lg:p-20 xl:p-24">
           <p className="py-12 text-green-950 text-justify text-lg sm:text-xl md:text-2xl lg:text-3xl">
