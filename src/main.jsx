@@ -1,10 +1,15 @@
+import { BrowserRouter } from 'react-router-dom'
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
+import { SpotifyApp } from './SpotifyApp'
+
 import './index.css'
-import { HomePage } from './HomePage'
+
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <HomePage />
+    <BrowserRouter>
+      <SpotifyApp />
+    </BrowserRouter>
   </StrictMode>,
 )
