@@ -1,22 +1,17 @@
-import React from 'react'
+import Bacground from '../../assets/bgImage.png'
 
 import { PublicNavbar } from '../components/PublicNavbar';
 import { Hero } from '../components/Hero';
 
-import Bacground from '../../assets/backgroundGreen.png'
 
 export const HomePage = () => {
-    const bgImage = {
-        backgroundImage: `url(${Bacground})`,
-        backgroundRepeat: 'no-repeat',
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-    };
-
     return (
         <>
-            <div className="relative overflow-hidden min-h-screen bg-green-700">
-                <div style={bgImage} className="relative z-10 min-h-screen">
+            <div className="relative overflow-hidden min-h-screen bg-spotify-green">
+                <div
+                    className="relative z-10 min-h-screen bg-center bg-no-repeat sm:bg-cover md:bg-cover"
+                    style={{ backgroundImage: `url(${Bacground})` }}
+                >
                     <PublicNavbar />
                     <Hero />
                 </div>
