@@ -1,6 +1,6 @@
-import { fetchUserProfile, redirectToSpotifyLogin } from '../../api/spotifyConsumer/auth/spotifyAuth'
-import {authTypes} from '../types/authTypes'
- export const useAuthenticate = (dispatch) => {
+import { fetchUserProfile, redirectToSpotifyLogin, exchangeCodeForToken } from '../../api/spotifyConsumer/auth/spotifyAuth'
+import { authTypes } from '../types/authTypes'
+export const useAuthenticate = (dispatch) => {
   // login
   const login = (userData) => {
     const action = {
@@ -18,6 +18,8 @@ import {authTypes} from '../types/authTypes'
     };
     dispatch(action);
   };
+
+
   // Logout
   const logoutWithSpotify = () => {
     localStorage.removeItem('spotifyAccessToken');
@@ -29,15 +31,15 @@ import {authTypes} from '../types/authTypes'
   // Login con Spotify
   const loginWithSpotify = async () => {
     try {
-
+      console.log('Redirigiendo al flujo de autenticación de Spotify...');
       await redirectToSpotifyLogin();
-
     } catch (error) {
-      console.error('Error al redirigir al flujo de autenticación de Spotify:', error);
+      console.error('Error en el flujo de autenticación:', error);
       dispatch({
         type: authTypes.errors,
-        payload: { errorMessage: 'Error al iniciar sesión con Spotify.' },
+        payload: { errorMessage: 'Error al redirigir al flujo de autenticación de Spotify.' },
       });
+      throw error;
     }
   };
 
@@ -46,14 +48,14 @@ import {authTypes} from '../types/authTypes'
     try {
       const accessToken = localStorage.getItem('spotifyAccessToken');
       const tokenExpiration = localStorage.getItem('spotifyTokenExpiration');
-  
+
       // Verifica si el token ha expirado
       if (!accessToken || Date.now() > parseInt(tokenExpiration, 10)) {
         throw new Error('El token de acceso ha expirado. Por favor, inicia sesión nuevamente.');
       }
-  
+ 
       const userProfile = await fetchUserProfile(accessToken);
-  
+
       // Actualiza el estado global
       login({
         email: userProfile.email,
@@ -62,7 +64,7 @@ import {authTypes} from '../types/authTypes'
         followers: userProfile.followers?.total || 0,
         subscription: userProfile.product || 'free',
       });
-  
+
       // Devuelve los datos del usuario
       return {
         email: userProfile.email,

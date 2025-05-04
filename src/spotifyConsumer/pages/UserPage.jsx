@@ -5,6 +5,9 @@ import { BodyUserPage } from '../components/BodyUserPage'
 import { useEffect, useState, useContext } from 'react';
 import { fetchUserProfile } from '../../api/spotifyConsumer/auth/spotifyAuth';
 import { UserContext } from '../../auth/context/UserContext';
+import {UserProfileContext} from '../contexts/UserProfileContext'
+
+
 
 /*const user = {
     firstName: 'Juan',
@@ -68,10 +71,15 @@ const sharedPlaylists = [
 ];
 
 export const UserPage = () => {
-    const { userState } = useContext(UserContext);
+    const { userState } = useContext(UserContext);6
     console.log('Estado global del usuario:', userState);
     const { user, errorMessage: error } = userState;
+/*
+    const { profileState } = useContext(UserProfileContext);
+    console.log('Estado global del perfil de usuario:', profileState);
 
+    const {} = useContext()
+*/
     if (error) {
         return <p className="text-red-500">{error}</p>;
     }

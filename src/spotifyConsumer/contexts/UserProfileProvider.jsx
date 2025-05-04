@@ -12,11 +12,11 @@ const initialProfileState = {
 
 export const UserProfileProvider = ({ children }) => {
     const [profileState, dispatch] = useReducer(userProfileReducer, initialProfileState);
-    const {getProfile, getSpotifyUser} = useProfile(dispatch);
+    const { getSpotifyUser} = useProfile(dispatch);
 
     return (
         <UserProfileContext.Provider
-            value={{ profileState, getProfile, getSpotifyUser}}>
+            value={{ profileState, getSpotifyUser}}>
             {children}
         </UserProfileContext.Provider>
     );
