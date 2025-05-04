@@ -13,7 +13,7 @@ export const authReducer = (state = {}, action = {}) => {
             return {
 
                 logged: false,
-                user: {},
+                user:{},
                 errorMessage: null
             }
         case authTypes.errors:

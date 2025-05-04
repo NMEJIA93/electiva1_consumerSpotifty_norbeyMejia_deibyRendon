@@ -1,10 +1,11 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { exchangeCodeForToken } from '../../api/spotifyConsumer/auth/spotifyAuth';
+import { UserContext } from '../../auth/context/UserContext';
 
 export const SpotifyCallback = () => {
   const navigate = useNavigate();
-  // Estado para almacenar el mensaje de error
+  const { getSpotifyUser } = useContext(UserContext);
   const [error, setError] = useState(null); 
 
   useEffect(() => {
@@ -14,6 +15,7 @@ export const SpotifyCallback = () => {
 
       if (!code) {
         setError('No se recibió un código de autorización.');
+        navigate('/login');
         return;
       }
 
@@ -26,22 +28,28 @@ export const SpotifyCallback = () => {
           localStorage.setItem('spotifyRefreshToken', data.refresh_token);
 
           // Calcula el tiempo de expiración
-          localStorage.setItem('spotifyTokenExpiration', Date.now() + data.expires_in * 1000); 
+          localStorage.setItem('spotifyTokenExpiration', Date.now() + data.expires_in * 1000);
 
-          console.log('Token recibido:', data);
+          // Obtiene el perfil del usuario
+          await getSpotifyUser();
+          const prueba = await getSpotifyUser();
+          console.log("prueba", prueba)
           // Redirige al usuario a la página principal
-          navigate('/userpage'); 
+          navigate('/userpage');
         } else {
           setError('No se recibió un token de acceso.');
+          navigate('/login');
         }
       } catch (error) {
-        console.error('Error al intercambiar el código por el token:', error.response?.data || error.message);
-        setError(error.response?.data?.error_description || 'Ocurrió un error inesperado.');
+        console.error('Error al procesar la autenticación:', error);
+        setError('Error al procesar la autenticación. Por favor, intenta nuevamente.');
+        navigate('/login');
       }
     };
 
     handleSpotifyCallback();
-  }, [navigate]);
+  }, [getSpotifyUser, navigate]);
+
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-spotify-black text-white">
