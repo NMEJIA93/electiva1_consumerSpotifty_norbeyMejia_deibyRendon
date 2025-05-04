@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
+import { redirectToSpotifyLogin } from '../../api/spotifyConsumer/auth/spotifyAuth'; // Asegúrate de que esta función esté definida en tu archivo de autenticación
 
 import bgBackground from '../../assets/bgBlackColor.png'
 
@@ -22,8 +23,8 @@ export const LoginPage = () => {
     };
 
     const onLoginWithSpotify = () => {
-        console.log('Iniciar sesión con Spotify');
-    };
+        redirectToSpotifyLogin(); // Redirige al usuario al flujo de autenticación de Spotify
+      };
 
     return (
         <div 

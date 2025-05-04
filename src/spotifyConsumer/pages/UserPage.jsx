@@ -2,12 +2,14 @@
 import ProfileMock from '../../assets/profileMock.png'
 import { PrivateNavbar } from '../components/PrivateNavbar'
 import { BodyUserPage } from '../components/BodyUserPage'
-
-const user = {
+import { useEffect, useState } from 'react';
+import { fetchUserProfile } from '../../api/spotifyConsumer/auth/spotifyAuth';
+/*const user = {
     firstName: 'Juan',
     lastName: 'Pérez',
     profilePicture: ProfileMock,
 };
+*/
 
 const ownPlaylists = [
     {
@@ -19,8 +21,8 @@ const ownPlaylists = [
             { id: 2, title: 'Canción 2', artist: 'Artista 2', duration: '4:20' },
         ],
         cover: 'https://picsum.photos/200',
-        followers: 120, // Número de seguidores
-        dateUpdate: '2025-05-01', // Fecha de última actualización
+        followers: 120, 
+        dateUpdate: '2025-05-01',
     },
     {
         id: 2,
@@ -64,6 +66,45 @@ const sharedPlaylists = [
 ];
 
 export const UserPage = () => {
+    const [user, setUser] = useState(null);
+    const [error, setError] = useState(null);
+
+    useEffect(() => {
+        const getUserProfile = async () => {
+            const accessToken = localStorage.getItem('spotifyAccessToken');
+            if (!accessToken) {
+                setError('No se encontró un token de acceso. Por favor, inicia sesión nuevamente.');
+                return;
+            }
+
+            try {
+                const userProfile = await fetchUserProfile(accessToken);
+                setUser({
+                    firstName: userProfile.display_name || 'Usuario',
+                    profilePicture: userProfile.images?.[0]?.url || '', 
+                    email: userProfile.email || 'Correo no disponible', 
+                    followers: userProfile.followers?.total || 0, 
+                    subscription: userProfile.product || 'free', 
+                },
+                console.log("email antes de asignarlo "+userProfile.email)
+            );
+                
+            } catch (error) {
+                setError('Error al obtener los datos del usuario. Por favor, intenta nuevamente.');
+            }
+            
+        };
+
+        getUserProfile();
+    }, []);
+
+    if (error) {
+        return <p className="text-red-500">{error}</p>;
+    }
+
+    if (!user) {
+        return <p className="text-white">Cargando datos del usuario...</p>;
+    }
 
     return (
         <>
