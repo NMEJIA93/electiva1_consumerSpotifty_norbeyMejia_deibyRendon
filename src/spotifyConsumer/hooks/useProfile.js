@@ -1,19 +1,23 @@
-import {fetchUserProfile} from '../../api/spotifyConsumer/auth/spotifyAuth'
+import { fetchUserProfile } from '../../api/spotifyConsumer/auth/spotifyAuth'
+import { actionTypes } from '../types/actiosTypes'
 
-import {actionTypes} from '../types/actiosTypes'
-
-export const useProfile =(dispatch) =>{
-  const getSpotifyUser = async () => {
+export const useProfile = (dispatch) => {
+  const getSpotifyProfile = async () => {
     try {
       const accessToken = localStorage.getItem('spotifyAccessToken');
       const tokenExpiration = localStorage.getItem('spotifyTokenExpiration');
-  
+      
+      console.log('Token de acceso desde useProfile :', accessToken);
+      console.log('Expiración del token desde useProfile:', tokenExpiration);
+
       if (!accessToken || Date.now() > parseInt(tokenExpiration, 10)) {
         throw new Error('El token de acceso ha expirado. Por favor, inicia sesión nuevamente.');
       }
-  
+
       const userProfile = await fetchUserProfile(accessToken);
-  
+      console.log('Perfil de usuario desde useProfile:', userProfile);
+
+      // Despacha el perfil al estado global
       dispatch({
         type: actionTypes.SET_PROFILE,
         payload: {
@@ -24,15 +28,18 @@ export const useProfile =(dispatch) =>{
           subscription: userProfile.product || 'free',
         },
       });
+
+      // Devuelve el perfil del usuario
+      return userProfile;
     } catch (error) {
       console.error('Error al obtener el perfil del usuario:', error);
       dispatch({
         type: actionTypes.SET_ERROR,
-        payload: 'Error al obtener el perfil del usuario.',
+        payload: 'Error al obtener el perfil del usuario en getSpotifyProfile.',
       });
       throw error;
     }
   };
 
-  return { getSpotifyUser };
+  return { getSpotifyProfile };
 };

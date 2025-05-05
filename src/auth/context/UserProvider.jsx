@@ -11,11 +11,11 @@ const authInitialState = {
 
 export const UserProvider = ({ children }) => {
     const [userState, dispatch] = useReducer(authReducer, authInitialState);
-    const { login, logout, loginWithSpotify,getSpotifyUser } = useAuthenticate(dispatch);
+    const { login, logout, loginWithSpotify/*,getSpotifyUser*/ } = useAuthenticate(dispatch);
 
     return (
         <UserContext.Provider
-            value={{userState,login,logout,loginWithSpotify,getSpotifyUser}}>
+            value={{userState,login,logout,loginWithSpotify/*,getSpotifyUser*/}}>
             {children}
         </UserContext.Provider>
     );

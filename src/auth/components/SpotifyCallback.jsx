@@ -2,20 +2,23 @@ import { useEffect, useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { exchangeCodeForToken } from '../../api/spotifyConsumer/auth/spotifyAuth';
 import { UserProfileContext } from '../../spotifyConsumer/contexts/UserProfileContext';
-import {UserContext} from '../../auth/context/UserContext'
+import { UserContext } from '../../auth/context/UserContext'
 
 
 export const SpotifyCallback = () => {
   const navigate = useNavigate();
   const [error, setError] = useState(null);
 
-  //const { getSpotifyUser } = useContext(UserProfileContext);
-  const { getSpotifyUser } = useContext(UserContext);
+  const { getSpotifyProfile,loginWithSpotify } = useContext(UserProfileContext);
+  //const { getSpotifyUser } = useContext(UserContext);
+  const { login } = useContext(UserContext);
 
   useEffect(() => {
-    const handleSpotifyCallback = async () => {
+    const spotifyCallback = async () => {
       const urlParams = new URLSearchParams(window.location.search);
       const code = urlParams.get('code');
+
+      console.log('Código de autorización recibido:', code);
 
       if (!code) {
         setError('No se recibió un código de autorización.');
@@ -35,8 +38,21 @@ export const SpotifyCallback = () => {
         console.log('Token recibido:', token);
 
         // Obtiene el perfil del usuario
-        await getSpotifyUser();
+        //await getSpotifyUser();
 
+        // Prueba flujo traer Perfil con flujo diferente
+        await getSpotifyProfile();
+        const userProfile = await getSpotifyProfile();
+        console.log('Perfil de usuario Prueba:', userProfile);
+
+        // Actualiza el estado global del usuario
+        login({
+          email: userProfile.email,
+          firstName: userProfile.display_name,
+          profilePicture: userProfile.images?.[0]?.url || '',
+          followers: userProfile.followers?.total || 0,
+          subscription: userProfile.product || 'free',
+        });
         // Redirige al usuario a la página principal
         navigate('/userpage');
       } catch (error) {
@@ -46,8 +62,8 @@ export const SpotifyCallback = () => {
       }
     };
 
-    handleSpotifyCallback();
-  }, [getSpotifyUser, navigate]);
+    spotifyCallback();
+  }, [getSpotifyProfile, navigate]);
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-spotify-black text-white">

@@ -1,3 +1,5 @@
+import ProfileMock from '../assets/profileMock.png';
+
 export const userMock = {
     firstName: 'Juan',
     lastName: 'Pérez',
