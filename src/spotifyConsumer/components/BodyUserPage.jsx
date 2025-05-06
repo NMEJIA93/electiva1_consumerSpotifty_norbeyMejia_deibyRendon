@@ -11,6 +11,7 @@ export const BodyUserPage = ({ user, ownPlaylists, sharedPlaylists }) => {
             <p className="text-sm text-gray-300">Correo: {user.email}</p>
             <p className="text-sm text-gray-300">Seguidores: {user.followers}</p>
             <p className="text-sm text-gray-300">Suscripción: {user.subscription}</p>
+            <p className="text-sm text-gray-300">perfil spotify: {user.profileLink}</p>
           </div>
         
           <div className="flex-shrink-0">

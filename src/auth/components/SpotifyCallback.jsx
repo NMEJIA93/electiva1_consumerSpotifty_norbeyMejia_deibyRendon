@@ -9,8 +9,7 @@ export const SpotifyCallback = () => {
   const navigate = useNavigate();
   const [error, setError] = useState(null);
 
-  const { getSpotifyProfile,loginWithSpotify } = useContext(UserProfileContext);
-  //const { getSpotifyUser } = useContext(UserContext);
+  const { getSpotifyProfile, setProfile } = useContext(UserProfileContext);
   const { login } = useContext(UserContext);
 
   useEffect(() => {
@@ -27,7 +26,6 @@ export const SpotifyCallback = () => {
       }
 
       try {
-        // Intercambia el código de autorización por un token de acceso
         const token = await exchangeCodeForToken(code);
         if (token.access_token) {
           localStorage.setItem('spotifyAccessToken', token.access_token);
@@ -35,24 +33,38 @@ export const SpotifyCallback = () => {
           localStorage.setItem('spotifyTokenExpiration', Date.now() + token.expires_in * 1000);
         }
 
-        console.log('Token recibido:', token);
-
-        // Obtiene el perfil del usuario
-        //await getSpotifyUser();
-
-        // Prueba flujo traer Perfil con flujo diferente
-        await getSpotifyProfile();
         const userProfile = await getSpotifyProfile();
         console.log('Perfil de usuario Prueba:', userProfile);
 
-        // Actualiza el estado global del usuario
         login({
           email: userProfile.email,
           firstName: userProfile.display_name,
           profilePicture: userProfile.images?.[0]?.url || '',
           followers: userProfile.followers?.total || 0,
           subscription: userProfile.product || 'free',
+          profileLink: userProfile.external_urls?.spotify || '',
         });
+
+        setProfile({
+          email: userProfile.email,
+          firstName: userProfile.display_name,
+          profilePicture: userProfile.images?.[0]?.url || '',
+          followers: userProfile.followers?.total || 0,
+          subscription: userProfile.product || 'free',
+          profileLink: userProfile.external_urls?.spotify || '',
+        });
+
+        const userlogin = {
+          email: userProfile.email,
+          firstName: userProfile.display_name,
+          profilePicture: userProfile.images?.[0]?.url || '',
+          followers: userProfile.followers?.total || 0,
+          subscription: userProfile.product || 'free',
+          profileLink: userProfile.external_urls?.spotify || '',
+        };
+        localStorage.setItem('userlogin', JSON.stringify(userlogin));
+        localStorage.setItem('logged', true);
+
         // Redirige al usuario a la página principal
         navigate('/userpage');
       } catch (error) {
@@ -63,7 +75,7 @@ export const SpotifyCallback = () => {
     };
 
     spotifyCallback();
-  }, [getSpotifyProfile, navigate]);
+  },[getSpotifyProfile, navigate, login, setProfile]);
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-spotify-black text-white">

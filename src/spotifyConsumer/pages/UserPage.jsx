@@ -5,22 +5,26 @@ import { PrivateNavbar } from '../components/PrivateNavbar'
 import { BodyUserPage } from '../components/BodyUserPage'
 import { userMock, ownPlaylists, sharedPlaylists } from '../../mocks/mocks'
 
-//import ProfileMock from '../../assets/profileMock.png'
-//import {UserProfileContext} from '../contexts/UserProfileContext'
-//import { fetchUserProfile } from '../../api/spotifyConsumer/auth/spotifyAuth';
-
+import { UserProfileContext } from '../contexts/UserProfileContext'
 
 export const UserPage = () => {
     const { userState } = useContext(UserContext);
     //console.log('Estado global del usuario:', userState);
     const { user, errorMessage: error } = userState;
 
-    /*
-        const { profileState } = useContext(UserProfileContext);
-        console.log('Estado global del perfil de usuario:', profileState);
+
+    const { profileState } = useContext(UserProfileContext);
+    console.log('Estado global del perfil de usuario +++++++++++++++++++++++:', profileState.profile);
+    console.log('****************************************', profileState.profile);
+    console.log('****************************************', profileState.profilePicture);
+    console.log('****************************************', profileState.firstName);
+
+    const t = {
+        nombre : profileState.firstName || 'Usuario',
+    }
+    console.log('Nombre del usuario:&&&&&&&&&&&&&&&&&&&&&&&&&', t.nombre);
+
     
-        const {} = useContext()
-    */
     if (error) {
         return <p className="text-red-500">{error}</p>;
     }
@@ -36,6 +40,7 @@ export const UserPage = () => {
         email: user.email || 'Correo no disponible',
         followers: user.followers || 0,
         subscription: user.subscription || 'free',
+        profileLink: profileState.profileLink || 'https://www.spotify.com',
     };
 
     return (

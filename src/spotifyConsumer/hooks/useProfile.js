@@ -6,11 +6,16 @@ export const useProfile = (dispatch) => {
     try {
       const accessToken = localStorage.getItem('spotifyAccessToken');
       const tokenExpiration = localStorage.getItem('spotifyTokenExpiration');
-      
+
       console.log('Token de acceso desde useProfile :', accessToken);
       console.log('Expiración del token desde useProfile:', tokenExpiration);
 
       if (!accessToken || Date.now() > parseInt(tokenExpiration, 10)) {
+        localStorage.removeItem('spotifyAccessToken');
+        localStorage.removeItem('spotifyRefreshToken');
+        localStorage.removeItem('spotifyTokenExpiration');
+        localStorage.removeItem('userlogin');
+        localStorage.removeItem('logged');
         throw new Error('El token de acceso ha expirado. Por favor, inicia sesión nuevamente.');
       }
 
@@ -41,5 +46,15 @@ export const useProfile = (dispatch) => {
     }
   };
 
-  return { getSpotifyProfile };
+
+  // Función para actualizar el perfil desde UserProvider
+  const setProfile = (profile) => {
+    console.log(profile)
+    dispatch({
+      type: 'SET_PROFILE',
+      payload: profile,
+    });
+  };
+
+  return { getSpotifyProfile,setProfile };
 };
