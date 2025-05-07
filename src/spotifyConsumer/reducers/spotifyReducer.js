@@ -1,19 +1,20 @@
 import { createContext, useReducer } from 'react';
 import { fetchUserProfile } from '../../api/spotifyConsumer/auth/spotifyAuth';
+import {actionTypes} from '../types/actionsTypes'
 
 export const userProfileReducer = (state, action) => {
   switch (action.type) {
-    case 'SET_PROFILE':
+    case actionTypes.SET_PROFILE:
       return {
         ...state,
         profile: action.payload
       };
-    case 'SET_PLAYLISTS':
+    case actionTypes.SET_PLAYLISTS:
       return {
         ...state,
         playlists: action.payload
       };
-    case 'SET_ERROR':
+    case actionTypes.SET_ERROR:
       return {
         ...state,
         error: action.payload

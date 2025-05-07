@@ -37,30 +37,29 @@ export const SpotifyCallback = () => {
         console.log('Perfil de usuario Prueba:', userProfile);
 
         login({
+          country: userProfile.country,
           email: userProfile.email,
           firstName: userProfile.display_name,
           profilePicture: userProfile.images?.[0]?.url || '',
           followers: userProfile.followers?.total || 0,
           subscription: userProfile.product || 'free',
           profileLink: userProfile.external_urls?.spotify || '',
-        });
-
-        setProfile({
-          email: userProfile.email,
-          firstName: userProfile.display_name,
-          profilePicture: userProfile.images?.[0]?.url || '',
-          followers: userProfile.followers?.total || 0,
-          subscription: userProfile.product || 'free',
-          profileLink: userProfile.external_urls?.spotify || '',
+          type: userProfile.type || 'user',
+          id: userProfile.id || 'user',
+          artistsFollowers: userProfile.artistsFollowers || [],
         });
 
         const userlogin = {
+          country: userProfile.country,
           email: userProfile.email,
           firstName: userProfile.display_name,
           profilePicture: userProfile.images?.[0]?.url || '',
           followers: userProfile.followers?.total || 0,
           subscription: userProfile.product || 'free',
           profileLink: userProfile.external_urls?.spotify || '',
+          type: userProfile.type || 'user',
+          id: userProfile.id || 'user',
+          artistsFollowers: userProfile.artistsFollowers || [],
         };
         localStorage.setItem('userlogin', JSON.stringify(userlogin));
         localStorage.setItem('logged', true);

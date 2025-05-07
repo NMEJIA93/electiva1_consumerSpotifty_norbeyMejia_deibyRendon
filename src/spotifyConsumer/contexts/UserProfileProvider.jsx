@@ -1,4 +1,4 @@
-import { useReducer, useState } from 'react';
+import { useReducer, useState, useEffect } from 'react';
 import { userProfileReducer } from '../reducers/spotifyReducer'
 import { UserProfileContext } from '../contexts/UserProfileContext'
 import { useProfile } from '../hooks/useProfile'
@@ -12,9 +12,18 @@ const initialProfileState = {
 
 export const UserProfileProvider = ({ children }) => {
     const [profileState, dispatch] = useReducer(userProfileReducer, initialProfileState);
-    const { getSpotifyProfile,setProfile} = useProfile(dispatch);
+    const { getSpotifyProfile,setProfile,syncUserStateWithLocalStorage} = useProfile(dispatch);
+    const [isLoading, setIsLoading] = useState(true)
 
 
+    useEffect(() => {
+        syncUserStateWithLocalStorage();
+        setIsLoading(false); 
+      }, []);
+    
+      if (isLoading) {
+        return <p>Cargando perfil...</p>; 
+      }
 
 
     return (

@@ -73,3 +73,21 @@ export const fetchUserProfile = async (accessToken) => {
     throw error;
   }
 };
+
+export const getSpotifyArtistsFollowers = async (accessToken) => {
+  try{
+    const response = await axios.get('https://api.spotify.com/v1/me/following?type=artist', {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+
+    // Devuelve los seguidores de los artistas
+    return response.data;
+
+
+  }catch (error) {
+    console.error('Error al obtener los seguidores de los artistas:', error.response?.data || error.message);
+    throw error;
+  }
+}
