@@ -3,7 +3,7 @@ import { userProfileReducer } from '../reducers/spotifyReducer'
 import { UserProfileContext } from '../contexts/UserProfileContext'
 import { useProfile } from '../hooks/useProfile'
 
-// Estado inicial del perfil del usuario
+
 const initialProfileState = {
     profile: null,
     playlists: [],

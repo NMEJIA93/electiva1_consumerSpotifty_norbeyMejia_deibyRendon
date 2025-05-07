@@ -17,8 +17,6 @@ export const SpotifyCallback = () => {
       const urlParams = new URLSearchParams(window.location.search);
       const code = urlParams.get('code');
 
-      console.log('Código de autorización recibido:', code);
-
       if (!code) {
         setError('No se recibió un código de autorización.');
         navigate('/login');
@@ -35,36 +33,12 @@ export const SpotifyCallback = () => {
 
         const userProfile = await getSpotifyProfile();
         console.log('Perfil de usuario Prueba:', userProfile);
+        console.log('********************',userProfile.profileLink)
 
-        login({
-          country: userProfile.country,
-          email: userProfile.email,
-          firstName: userProfile.display_name,
-          profilePicture: userProfile.images?.[0]?.url || '',
-          followers: userProfile.followers?.total || 0,
-          subscription: userProfile.product || 'free',
-          profileLink: userProfile.external_urls?.spotify || '',
-          type: userProfile.type || 'user',
-          id: userProfile.id || 'user',
-          artistsFollowers: userProfile.artistsFollowers || [],
-        });
-
-        const userlogin = {
-          country: userProfile.country,
-          email: userProfile.email,
-          firstName: userProfile.display_name,
-          profilePicture: userProfile.images?.[0]?.url || '',
-          followers: userProfile.followers?.total || 0,
-          subscription: userProfile.product || 'free',
-          profileLink: userProfile.external_urls?.spotify || '',
-          type: userProfile.type || 'user',
-          id: userProfile.id || 'user',
-          artistsFollowers: userProfile.artistsFollowers || [],
-        };
-        localStorage.setItem('userlogin', JSON.stringify(userlogin));
+        localStorage.setItem('userlogin', JSON.stringify(userProfile));
+        localStorage.setItem('profileSpotify', JSON.stringify(userProfile));
         localStorage.setItem('logged', true);
 
-        // Redirige al usuario a la página principal
         navigate('/userpage');
       } catch (error) {
         console.error('Error en el flujo de autenticación:', error);
