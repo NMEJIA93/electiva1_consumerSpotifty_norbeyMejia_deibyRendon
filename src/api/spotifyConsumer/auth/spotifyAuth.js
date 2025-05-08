@@ -11,8 +11,7 @@ import { generateCodeVerifier, generateCodeChallenge } from './pkceUtils';
 export const redirectToSpotifyLogin = async () => {
   const codeVerifier = generateCodeVerifier();
 
-  // Almacena el code_verifier en localStorage
-  localStorage.setItem('spotifyCodeVerifier', codeVerifier); 
+  localStorage.setItem('spotifyCodeVerifier', codeVerifier);
   const codeChallenge = await generateCodeChallenge(codeVerifier);
 
   const authUrl = `${SPOTIFY_AUTH_ENDPOINT}?client_id=${SPOTIFY_CLIENT_ID}&response_type=code&redirect_uri=${encodeURIComponent(
@@ -27,8 +26,7 @@ export const redirectToSpotifyLogin = async () => {
 export const exchangeCodeForToken = async (code) => {
   try {
 
-    // Busca el code_verifier de localStorage
-    const codeVerifier = localStorage.getItem('spotifyCodeVerifier'); 
+    const codeVerifier = localStorage.getItem('spotifyCodeVerifier');
     if (!codeVerifier) {
       throw new Error('No se encontró el code_verifier en localStorage.');
     }
@@ -49,8 +47,7 @@ export const exchangeCodeForToken = async (code) => {
       }
     );
 
-    // devuelve el token de acceso y el token de actualización
-    return response.data; 
+    return response.data;
   } catch (error) {
     console.error('Error al intercambiar el código por el token:', error.response?.data || error.message);
     throw error;
@@ -66,8 +63,7 @@ export const fetchUserProfile = async (accessToken) => {
       },
     });
 
-    // Devuelve los datos del perfil del usuario
-    return response.data; 
+    return response.data;
   } catch (error) {
     console.error('Error al obtener el perfil del usuario:', error.response?.data || error.message);
     throw error;
@@ -75,18 +71,17 @@ export const fetchUserProfile = async (accessToken) => {
 };
 
 export const getSpotifyArtistsFollowers = async (accessToken) => {
-  try{
+  try {
     const response = await axios.get('https://api.spotify.com/v1/me/following?type=artist', {
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },
     });
 
-    // Devuelve los seguidores de los artistas
     return response.data;
 
 
-  }catch (error) {
+  } catch (error) {
     console.error('Error al obtener los seguidores de los artistas:', error.response?.data || error.message);
     throw error;
   }
