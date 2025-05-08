@@ -35,10 +35,13 @@ export const SpotifyCallback = () => {
         console.log('Perfil de usuario Prueba:', userProfile);
         console.log('********************',userProfile.profileLink)
 
-        localStorage.setItem('userlogin', JSON.stringify(userProfile));
-        localStorage.setItem('profileSpotify', JSON.stringify(userProfile));
+        login(userProfile)
+
+        const userlogin = userProfile;
+        localStorage.setItem('userlogin', JSON.stringify(userlogin));
         localStorage.setItem('logged', true);
 
+        // Redirige al usuario a la página principal
         navigate('/userpage');
       } catch (error) {
         console.error('Error en el flujo de autenticación:', error);
