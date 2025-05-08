@@ -13,10 +13,10 @@ const authInitialState = {
 
 export const UserProvider = ({ children }) => {
     const [userState, dispatch] = useReducer(authReducer, authInitialState);
-    const { login, logout, loginWithSpotify } = useAuthenticate(dispatch);
+    const { login, logout, loginWithSpotify,logoutWithSpotify } = useAuthenticate(dispatch);
     const [isLoading, setIsLoading] = useState(true);
 
-    // Función para inicializar el estado desde localStorage
+
     const initializeUserState = async () => {
         const storedUser = localStorage.getItem('userlogin');
         const isLogged = localStorage.getItem('logged') === 'true';
@@ -37,7 +37,7 @@ export const UserProvider = ({ children }) => {
         }
     };
 
-    // Función para limpiar el localStorage en caso de error
+
     const clearLocalStorage = () => {
         localStorage.removeItem('userlogin');
         localStorage.removeItem('logged');
@@ -50,7 +50,7 @@ export const UserProvider = ({ children }) => {
             } catch (error) {
                 console.error('Error al sincronizar el estado del usuario:', error);
             } finally {
-                setIsLoading(false); // Asegúrate de que siempre se actualice el estado de carga
+                setIsLoading(false); 
             }
         };
 
@@ -72,7 +72,7 @@ export const UserProvider = ({ children }) => {
 
     return (
         <UserContext.Provider
-            value={{ userState, login, logout, loginWithSpotify }}
+            value={{ userState, login, logout, loginWithSpotify,logoutWithSpotify }}
         >
             {children}
         </UserContext.Provider>

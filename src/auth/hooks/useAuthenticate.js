@@ -27,13 +27,15 @@ export const useAuthenticate = (dispatch) => {
     localStorage.removeItem('spotifyAccessToken');
     localStorage.removeItem('spotifyRefreshToken');
     localStorage.removeItem('spotifyTokenExpiration');
+    localStorage.removeItem('userlogin');
+    localStorage.removeItem('logged');
+
     dispatch({ type: authTypes.logout });
   };
 
   // Login con Spotify
   const loginWithSpotify = async () => {
     try {
-      console.log('Redirigiendo al flujo de autenticación de Spotify...');
       await redirectToSpotifyLogin();
     } catch (error) {
       console.error('Error en el flujo de autenticación:', error);
@@ -46,5 +48,5 @@ export const useAuthenticate = (dispatch) => {
   };
 
 
-  return { login, logout, loginWithSpotify, /*getSpotifyUser*/ };
+  return { login, logout, loginWithSpotify,logoutWithSpotify  };
 };

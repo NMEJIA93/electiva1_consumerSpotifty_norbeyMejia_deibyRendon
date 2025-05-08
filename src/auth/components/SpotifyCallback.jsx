@@ -11,7 +11,7 @@ export const SpotifyCallback = () => {
   const { getSpotifyProfile } = useContext(UserProfileContext);
   const { login } = useContext(UserContext);
 
-  // Función para manejar el flujo de autenticación
+  
   const processApiSpotifyCallback = async () => {
     try {
       const authorizationCode = extractAuthorizationCode();
@@ -22,21 +22,19 @@ export const SpotifyCallback = () => {
       const tokenData = await fetchTokenData(authorizationCode);
       await fetchAndSaveUserProfile(tokenData);
 
-      navigate('/userpage'); // Redirige al usuario a la página principal
+      navigate('/userpage'); 
     } catch (error) {
       console.error('Error en el flujo de autenticación:', error);
       setError(error.message || 'Error al procesar la autenticación.');
-      navigate('/login'); // Redirige al login en caso de error
+      navigate('/login'); 
     }
   };
 
-  // Extrae el código de autorización desde la URL
   const extractAuthorizationCode = () => {
     const urlParams = new URLSearchParams(window.location.search);
     return urlParams.get('code');
   };
 
-  // Intercambia el código de autorización por un token
   const fetchTokenData = async (code) => {
     const token = await exchangeCodeForToken(code);
     if (token.access_token) {
@@ -47,19 +45,17 @@ export const SpotifyCallback = () => {
     return token;
   };
 
-  // Obtiene el perfil del usuario y lo almacena
   const fetchAndSaveUserProfile = async (token) => {
     const userProfile = await getSpotifyProfile();
-    login(userProfile); // Actualiza el estado global del usuario
+    login(userProfile); 
 
-    // Guarda el perfil del usuario en localStorage
     localStorage.setItem('userlogin', JSON.stringify(userProfile));
     localStorage.setItem('logged', true);
   };
 
   useEffect(() => {
     processApiSpotifyCallback();
-  }, []); // Solo se ejecuta una vez al montar el componente
+  }, []); 
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-spotify-black text-white">
@@ -75,7 +71,7 @@ export const SpotifyCallback = () => {
   );
 };
 
-// Componente para mostrar mensajes de error
+
 const ErrorDisplay = ({ error, navigate }) => (
   <div className="text-center">
     <h1 className="text-2xl font-bold mb-4">Error</h1>

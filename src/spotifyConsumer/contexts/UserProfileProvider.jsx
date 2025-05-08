@@ -13,22 +13,16 @@ const initialProfileState = {
 export const UserProfileProvider = ({ children }) => {
     const [profileState, dispatch] = useReducer(userProfileReducer, initialProfileState);
     const { getSpotifyProfile, setProfile, syncUserStateWithLocalStorage } = useProfile(dispatch);
-    const [isLoading, setIsLoading] = useState(true)
+    //const [isLoading, setIsLoading] = useState(true)
 
-
-    // Define las rutas en las que deseas ejecutar el efecto
     const allowedRoutes = ['/userpage'];
 
     useEffect(() => {
-        // Verifica si la ruta actual está en las rutas permitidas
         if (allowedRoutes.includes(location.pathname)) {
             syncUserStateWithLocalStorage();
-            setIsLoading(false);
+            //setIsLoading(false);
         }
-    }, [location.pathname]); // Escucha cambios en la ruta actual
-
-
-
+    }, [location.pathname]); 
 
     return (
         <UserProfileContext.Provider
