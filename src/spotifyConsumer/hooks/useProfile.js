@@ -24,11 +24,11 @@ export const useProfile = (dispatch) => {
       console.log('Perfil de usuario desde useProfile:', userProfile);
 
       const artistsFollowers = await getSpotifyArtistsFollowers(accessToken);
-      console.log('Seguidores de artistas desde useProfile:', artistsFollowers);
+      //console.log('Seguidores de artistas desde useProfile:', artistsFollowers);
 
-      console.log('Artistas seguidores:', artistsFollowers.artistsFollowers);
+      //console.log('Artistas seguidores:', artistsFollowers.artistsFollowers);
 
-      console.log('arreglo artistas------------',artistsFollowers.artists.items)
+      //console.log('arreglo artistas------------',artistsFollowers.artists.items)
 
       const user ={
         country: userProfile.country,
@@ -61,9 +61,9 @@ export const useProfile = (dispatch) => {
 
 
   const setProfile = (profile) => {
-    console.log(profile)
+    console.log("log desde ser profile ----------------",profile)
     dispatch({
-      type: 'SET_PROFILE',
+      type: actionTypes.SET_PROFILE,
       payload: profile,
     });
   };

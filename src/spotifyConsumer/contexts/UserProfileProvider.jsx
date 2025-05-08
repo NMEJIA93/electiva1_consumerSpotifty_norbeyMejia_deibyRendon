@@ -16,14 +16,18 @@ export const UserProfileProvider = ({ children }) => {
     const [isLoading, setIsLoading] = useState(true)
 
 
-    useEffect(() => {
-        syncUserStateWithLocalStorage();
-        setIsLoading(false);
-    }, []);
+    // Define las rutas en las que deseas ejecutar el efecto
+    const allowedRoutes = ['/userpage'];
 
-    if (isLoading) {
-        return <p>Cargando perfil...</p>;
-    }
+    useEffect(() => {
+        // Verifica si la ruta actual está en las rutas permitidas
+        if (allowedRoutes.includes(location.pathname)) {
+            syncUserStateWithLocalStorage();
+            setIsLoading(false);
+        }
+    }, [location.pathname]); // Escucha cambios en la ruta actual
+
+
 
 
     return (

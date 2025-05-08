@@ -7,6 +7,7 @@ import {  DesktopProfileMenu } from './DesktopMenu'
 
 const navbarProfilelinks = [
     { id: 1, title: 'Inicio', link: '/' },
+    { id: 1, title: 'Perfil', link: '/userpage' },
     { id: 2, title: 'Listas', link: '/' },
     { id: 3, title: 'Preferencias', link: '/' },
     { id: 4, title: 'Cerrar Sesión', link: '/' },

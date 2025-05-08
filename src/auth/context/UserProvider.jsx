@@ -13,15 +13,16 @@ const authInitialState = {
 
 export const UserProvider = ({ children }) => {
     const [userState, dispatch] = useReducer(authReducer, authInitialState);
-    const { login, logout, loginWithSpotify/*,getSpotifyUser*/ } = useAuthenticate(dispatch);
+    const { login, logout, loginWithSpotify } = useAuthenticate(dispatch);
     const [isLoading, setIsLoading] = useState(true);
 
-    const syncUserStateWithLocalStorage = () => {
+    // Función para inicializar el estado desde localStorage
+    const initializeUserState = async () => {
         const storedUser = localStorage.getItem('userlogin');
         const isLogged = localStorage.getItem('logged') === 'true';
 
-        try {
-            if (storedUser && isLogged) {
+        if (storedUser && isLogged) {
+            try {
                 const parsedUser = JSON.parse(storedUser);
                 if (parsedUser && typeof parsedUser === 'object') {
                     dispatch({
@@ -29,29 +30,51 @@ export const UserProvider = ({ children }) => {
                         payload: parsedUser,
                     });
                 }
+            } catch (error) {
+                console.error('Error al parsear los datos del usuario desde localStorage:', error);
+                clearLocalStorage();
             }
-        } catch (error) {
-            console.error('Error al recuperar los datos del usuario desde localStorage:', error);
-            localStorage.removeItem('userlogin');
-            localStorage.removeItem('logged');
-        } finally {
-            setIsLoading(false);
         }
     };
 
+    // Función para limpiar el localStorage en caso de error
+    const clearLocalStorage = () => {
+        localStorage.removeItem('userlogin');
+        localStorage.removeItem('logged');
+    };
+
     useEffect(() => {
-        syncUserStateWithLocalStorage();
+        const syncState = async () => {
+            try {
+                await initializeUserState();
+            } catch (error) {
+                console.error('Error al sincronizar el estado del usuario:', error);
+            } finally {
+                setIsLoading(false); // Asegúrate de que siempre se actualice el estado de carga
+            }
+        };
+
+        syncState();
     }, []);
 
     if (isLoading) {
-        return <p>Cargando...</p>;
+        return (
+            <div className="min-h-screen flex flex-col items-center justify-center bg-spotify-black text-white">
+                <div className="flex flex-col items-center">
+                    {/* Spinner animado */}
+                    <div className="w-12 h-12 border-4 border-spotify-green border-t-transparent rounded-full animate-spin"></div>
+                    {/* Texto de carga */}
+                    <p className="text-lg mt-4 text-spotify-gray">Cargando...</p>
+                </div>
+            </div>
+        );
     }
-
 
     return (
         <UserContext.Provider
-            value={{ userState, login, logout, loginWithSpotify/*,getSpotifyUser*/ }}>
+            value={{ userState, login, logout, loginWithSpotify }}
+        >
             {children}
         </UserContext.Provider>
     );
-}
+};
