@@ -52,23 +52,24 @@ export const useProfile = (dispatch) => {
   };
 
   const syncUserStateWithLocalStorage = () => {
-    const storedUser = localStorage.getItem('userlogin');
-    const isLogged = localStorage.getItem('logged') === 'true';
-
-    if (storedUser && isLogged) {
-      try {
-        const parsedUser = JSON.parse(storedUser);
-        dispatch({
-          type: actionTypes.SET_PROFILE,
-          payload: parsedUser,
-        });
-      } catch (error) {
-        console.error('Error al recuperar los datos del usuario desde localStorage:', error);
-        clearLocalStorage();
-      }
+    const storedUser = getUserFromLocalStorage();
+    if (storedUser) {
+      updateGlobalStateWithUser(storedUser);
     }
   };
-
+  
+  const getUserFromLocalStorage = () => {
+    const storedUser = localStorage.getItem('userlogin');
+    const isLogged = localStorage.getItem('logged') === 'true';
+    return storedUser && isLogged ? JSON.parse(storedUser) : null;
+  };
+  
+  const updateGlobalStateWithUser = (user) => {
+    dispatch({
+      type: actionTypes.SET_PROFILE,
+      payload: user,
+    });
+  };
 
   const validateAccessToken = () => {
     const accessToken = localStorage.getItem('spotifyAccessToken');

@@ -47,8 +47,11 @@ export const SpotifyCallback = () => {
 
   const fetchAndSaveUserProfile = async (token) => {
     const userProfile = await getSpotifyProfile();
-    login(userProfile); 
-
+    saveUserProfileToLocalStorage(userProfile);
+    login(userProfile);
+  };
+  
+  const saveUserProfileToLocalStorage = (userProfile) => {
     localStorage.setItem('userlogin', JSON.stringify(userProfile));
     localStorage.setItem('logged', true);
   };
