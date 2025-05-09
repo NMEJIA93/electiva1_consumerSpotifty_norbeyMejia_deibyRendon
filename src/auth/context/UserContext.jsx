@@ -1,1 +1,4 @@
-// aqui va el contexto de usuario
+
+import {createContext} from "react";
+
+export const UserContext = createContext();

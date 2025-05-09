@@ -7,8 +7,7 @@ import { MobileMenu } from './MobileMenu'
 
 const navbarlinks = [
   { id: 1, title: 'Login', link: '/login' },
-  { id: 2, title: 'Register', link: '/'},
-
+  { id: 2, title: 'Register', link: '/register'},
 ]
 
 export const PublicNavbar = () => {
@@ -18,7 +17,7 @@ export const PublicNavbar = () => {
   const toggleMenu = () => setIsOpen(!isOpen);
 
   return (
-    <nav className="bg-black fixed top-0 left-0 w-full bg-opacity-90 backdrop-blur-md z-50">
+    <nav className="bg-spotify-gr4 fixed top-0 left-0 w-full bg-opacity-90 backdrop-blur-md z-50">
       <div className="flex justify-between items-center sm:px-12 sm:py-6 px-4 py-1">
         {/* Logo */}
         <div>
