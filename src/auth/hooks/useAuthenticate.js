@@ -48,4 +48,4 @@ export const useAuthenticate = (dispatch) => {
   };
 
 
-  return { login, logout, loginWithSpotify,logoutWithSpotify  };
+  return { login, logout, loginWithSpotify,logoutWithSpotify}};
