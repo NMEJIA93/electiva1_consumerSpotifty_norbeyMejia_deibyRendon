@@ -19,16 +19,16 @@ export const RegisterForm = () => {
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData({ ...formData, [name]: value });
-        validate(name, value, formData); // Validación en tiempo real
+        validate(name, value, formData); 
     };
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        const newErrors = validateAll(formData); // Validación final
+        const newErrors = validateAll(formData); 
 
         if (Object.keys(newErrors).length === 0) {
             console.log('Datos validados correctamente:', formData);
-            alert('Formulario validado correctamente.'); // Mensaje temporal
+            alert('Formulario validado correctamente.'); 
         } else {
             console.log('Errores en el formulario:', newErrors);
         }

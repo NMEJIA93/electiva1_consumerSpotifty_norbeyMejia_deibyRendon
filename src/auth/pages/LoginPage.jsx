@@ -1,10 +1,14 @@
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
+import { useContext } from 'react';
+import { UserContext } from '../context/UserContext';
+//import { redirectToSpotifyLogin } from '../../api/spotifyConsumer/auth/spotifyAuth'; 
 
 import bgBackground from '../../assets/bgBlackColor.png'
 
 export const LoginPage = () => {
     const navigate = useNavigate();
+    const { loginWithSpotify, loginWithGoogle } = useContext(UserContext);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
@@ -12,18 +16,21 @@ export const LoginPage = () => {
         navigate('/', { replace: true });
     };
 
+    
     const onLoginUser = () => {
-        console.log('Iniciar sesión como Usuario', { email, password });
+        //console.log('Iniciar sesión como Usuario', { email, password });
         navigate('/userpage', { replace: true });
     };
+    
 
     const onLoginWithGoogle = () => {
         console.log('Iniciar sesión con Google');
     };
-
+/*
     const onLoginWithSpotify = () => {
-        console.log('Iniciar sesión con Spotify');
-    };
+        redirectToSpotifyLogin(); // Redirige al usuario al flujo de autenticación de Spotify
+      };
+      */
 
     return (
         <div 
@@ -73,15 +80,15 @@ export const LoginPage = () => {
                         onClick={onLoginWithGoogle}
                         className="w-full py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg transition-all"
                     >
-                        <i class="bi bi-google mr-3"></i>
+                        <i className="bi bi-google mr-3"></i>
                         Google
                     </button>
                     {/* Botón para iniciar sesión con Spotify */}
                     <button
-                        onClick={onLoginWithSpotify}
+                        onClick={loginWithSpotify}
                         className="w-full py-2 bg-spotify-green hover:bg-green-600 text-white rounded-lg transition-all"
                     >
-                        <i class="bi bi-spotify mr-3"></i>
+                        <i className="bi bi-spotify mr-3"></i>
                         Iniciar sesión con Spotify
                     </button>
                 </div>
