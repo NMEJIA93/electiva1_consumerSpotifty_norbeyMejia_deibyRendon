@@ -1,5 +1,7 @@
 # Consumer Spotify App 🎵  
-Aplicación React que permite explorar tu perfil de Spotify, playlists y más. Desarrollada con Vite, TailwindCSS y autenticación OAuth2 (PKCE) con Spotify.
+React application that allows you to explore your Spotify profile, playlists, and more. Built with Vite, TailwindCSS, and OAuth2 (PKCE) authentication with Spotify.
+
+---
 
 ## 👥 Team Members
 - **Deiby Rendon**
@@ -7,86 +9,105 @@ Aplicación React que permite explorar tu perfil de Spotify, playlists y más. D
 
 ---
 
-## 🛠️ Tecnologías utilizadas
+## 🛠️ Technologies Used
 
-- **React** ⚛️: Biblioteca de JavaScript para construir interfaces de usuario.
-- **Vite** ⚡: Herramienta de desarrollo rápida y ligera.
-- **TailwindCSS** 🎨: Framework de utilidades CSS para diseño moderno y responsivo.
-- **JavaScript** 📜: Lenguaje de programación utilizado para el desarrollo de la aplicación.
-- **Axios** 🌐: Cliente HTTP para interactuar con la API de Spotify.
-- **React Router** 🛣️: Manejo de rutas en la aplicación.
-- **Bootstrap Icons** 🎯: Íconos para mejorar la interfaz.
-
----
-
-## 🚀 Características principales
-
-- **Inicio de sesión**:
-  - Inicia sesión con correo y contraseña.
-  - Autenticación mediante Google y Spotify (OAuth2 con PKCE).
-- **Integración con Spotify**:
-  - Recupera información del perfil del usuario desde la API de Spotify.
-  - Muestra playlists propias y compartidas.
-- **Diseño moderno**:
-  - Utiliza TailwindCSS con una paleta de colores personalizada basada en Spotify.
-  - Diseño responsivo para dispositivos móviles y escritorio.
-- **Validaciones**:
-  - Validación en tiempo real en formularios de registro.
-- **Rutas protegidas**:
-  - Redirección de usuarios no autenticados a login.
+- **React** ⚛️: JavaScript library for building user interfaces.
+- **Vite** ⚡: Fast and lightweight development tool.
+- **TailwindCSS** 🎨: Utility-first CSS framework for modern and responsive design.
+- **JavaScript** 📜: Programming language used for the application.
+- **Axios** 🌐: HTTP client for interacting with the Spotify API.
+- **React Router** 🛣️: Routing management for the application.
+- **Bootstrap Icons** 🎯: Icons to enhance the interface.
 
 ---
 
-## 🎨 Diseño UX/UI de las páginas
+## 🚀 Key Features
+
+- **Login**:
+  - Login with email and password.
+  - Authentication via Google and Spotify (OAuth2 with PKCE).
+- **Spotify Integration**:
+  - Retrieve user profile information from the Spotify API.
+  - Display personal and shared playlists.
+  - View artists followed by the user.
+- **Modern Design**:
+  - Uses TailwindCSS with a custom color palette inspired by Spotify.
+  - Responsive design for mobile and desktop devices.
+- **Validations**:
+  - Real-time validation in registration forms.
+- **Protected Routes**:
+  - Redirect unauthenticated users to the login page.
+- **Global State Management**:
+  - Context API and Reducers to manage authentication and user profile state.
+
+---
+
+## 🎨 UX/UI Design of Pages
 
 ### 🏠 HomePage
-- **Diseño**: Página de inicio con fondo dinámico y paleta de colores de Spotify.
-- **Componentes principales**: `PublicNavbar`, `Hero`.
-- **Experiencia de usuario**: Navegación clara y diseño adaptable a todos los dispositivos.
+- **Design**: Landing page with dynamic background and Spotify-inspired color palette.
+- **Main Components**: `PublicNavbar`, `Hero`.
+- **User Experience**: Clear navigation and adaptable design for all devices.
 
 ### 🔑 LoginPage
-- **Diseño**: Fondo oscuro con formulario centrado.
-- **Componentes principales**: Campos de login, botones de Google y Spotify, botón de cancelar.
-- **UX**: Validación en tiempo real y transiciones suaves.
+- **Design**: Dark background with a centered form.
+- **Main Components**: Login fields, Google and Spotify buttons, cancel button.
+- **UX**: Real-time validation and smooth transitions.
 
 ### 📝 RegisterPage
-- **Diseño**: Fondo verde, formulario organizado.
-- **Componentes principales**: Campos de nombre, correo, contraseña, y botones de acción.
-- **UX**: Validaciones y mensajes de error visibles.
+- **Design**: Green background with an organized form.
+- **Main Components**: Fields for name, email, password, and action buttons.
+- **UX**: Validations and visible error messages.
 
 ### 👤 UserPage
-- **Diseño**: Página personalizada con fondo verde.
-- **Componentes**: `PrivateNavbar`, `BodyUserPage`.
-- **UX**: Visualización clara de información de usuario y playlists.
+- **Design**: Personalized page with a green background.
+- **Components**: `PrivateNavbar`, `BodyUserPage`.
+- **UX**: Clear display of user information, personal and shared playlists, and followed artists.
 
 ### 🔄 SpotifyCallback
-- **Diseño**: Página intermedia tras autenticación Spotify.
-- **Componentes**: Mensajes de carga y error.
-- **UX**: Retroalimentación clara durante el proceso de autenticación.
+- **Design**: Intermediate page after Spotify authentication.
+- **Components**: Loading and error messages.
+- **UX**: Clear feedback during the authentication process.
 
 ---
 
-## 📦 Instalación y configuración
+## 📦 Installation and Setup
 
-1. Clona el repositorio:
+1. Clone the repository:
    ```bash
    git clone https://github.com/NMEJIA93/electiva1_consumerSpotifty_norbeyMejia_deibyRendon.git
    cd electiva1_consumerSpotifty_norbeyMejia_deibyRendon
    ```
 
-2. Instala dependencias:
+2. Install dependencies:
    ```bash
    npm install
    ```
 
-3. Inicia el servidor de desarrollo:
+3. Start the development server:
    ```bash
    npm run dev
    ```
 
+4. Configure environment variables:
+   - Ensure you properly configure the values in `src/api/spotifyConsumer/config/spotifyConfig.js`:
+     ```javascript
+     export const SPOTIFY_CLIENT_ID = 'YOUR_CLIENT_ID';
+     export const SPOTIFY_REDIRECT_URI = 'http://127.0.0.1:5173/callback';
+     export const SPOTIFY_AUTH_ENDPOINT = 'https://accounts.spotify.com/authorize';
+     export const SPOTIFY_TOKEN_ENDPOINT = 'https://accounts.spotify.com/api/token';
+     export const SPOTIFY_SCOPES = [
+         'user-read-private',
+         'user-read-email',
+         'playlist-read-private',
+         'playlist-read-collaborative',
+         'user-follow-read'
+     ].join(' ');
+     ```
+
 ---
 
-## 📁 Estructura del proyecto
+## 📁 Project Structure
 
 ```
 ├── public/
@@ -138,25 +159,25 @@ Aplicación React que permite explorar tu perfil de Spotify, playlists y más. D
 
 ---
 
-## 📜 Scripts disponibles
+## 📜 Available Scripts
 
-| Comando           | Descripción                              |
+| Command           | Description                              |
 |-------------------|------------------------------------------|
-| `npm run dev`     | Inicia el servidor de desarrollo         |
-| `npm run build`   | Genera una versión optimizada            |
-| `npm run preview` | Visualiza la app en modo producción local|
+| `npm run dev`     | Starts the development server            |
+| `npm run build`   | Builds an optimized production version   |
+| `npm run preview` | Previews the app in local production mode|
 
 ---
 
-## 📸 Capturas de pantalla
+## 📸 Screenshots
 
-> Puedes agregar imágenes o GIFs aquí que muestren el diseño y las funcionalidades de la app.
+> Add images or GIFs here to showcase the app's design and features.
 
 ---
 
-## 📫 Contacto
+## 📫 Contact
 
-¿Tienes preguntas o sugerencias? Contáctanos:
+Have questions or suggestions? Contact us:
 
 - Deiby Rendon - [GitHub](https://github.com/deibyren)
 - Norbey Mejia - [GitHub](https://github.com/NMEJIA93)
