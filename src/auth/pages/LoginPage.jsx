@@ -1,34 +1,27 @@
-import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
+import { useAuthActions } from '../hooks/useAuthActions';
+import bgBackground from '../../assets/bgBlackColor.png';
 
-import bgBackground from '../../assets/bgBlackColor.png'
 
 export const LoginPage = () => {
-    const navigate = useNavigate();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [error, setError] = useState(null);
+    const {
+        onCancel,
+        onLoginUser,
+        handleGoogleCallback,
+        onLoginWithFacebook,
+        onLoginWithSpotify,
+        onNavigateToRegister,
+    } = useAuthActions();
 
-    const onCancel = () => {
-        navigate('/', { replace: true });
-    };
 
-    const onLoginUser = () => {
-        console.log('Iniciar sesión como Usuario', { email, password });
-        navigate('/userpage', { replace: true });
-    };
-
-    const onLoginWithGoogle = () => {
-        console.log('Iniciar sesión con Google');
-    };
-
-    const onLoginWithSpotify = () => {
-        console.log('Iniciar sesión con Spotify');
-    };
 
     return (
-        <div 
-        className="min-h-screen flex flex-col items-center justify-center bg-spotify-black text-white"
-        style={{ backgroundImage: `url(${bgBackground})` }}
+        <div
+            className="min-h-screen flex flex-col items-center justify-center bg-spotify-black text-white"
+            style={{ backgroundImage: `url(${bgBackground})` }}
         >
             <div className="bg-spotify-darkGray p-6 rounded-lg shadow-lg w-full max-w-md">
                 <h1 className="text-3xl font-bold mb-8 text-center">Iniciar Sesión</h1>
@@ -69,23 +62,39 @@ export const LoginPage = () => {
                             <div className="flex-grow border-t border-gray-400"></div>
                         </div>
                     </div>
+                    <div id="google-signin-button">
+                        <button
+                            onClick={handleGoogleCallback}
+                            className="w-full py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-all flex items-center justify-center"
+                        >
+                            <i className="bi bi-google mr-3"></i>
+                            Google
+                        </button>
+                    </div>
                     <button
-                        onClick={onLoginWithGoogle}
-                        className="w-full py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg transition-all"
+                        onClick={onLoginWithFacebook}
+                        className="w-full py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-all"
                     >
-                        <i class="bi bi-google mr-3"></i>
-                        Google
+                        <i className="bi bi-facebook mr-3"></i>
+                        Facebook
                     </button>
-                    {/* Botón para iniciar sesión con Spotify */}
                     <button
                         onClick={onLoginWithSpotify}
                         className="w-full py-2 bg-spotify-green hover:bg-green-600 text-white rounded-lg transition-all"
                     >
-                        <i class="bi bi-spotify mr-3"></i>
+                        <i className="bi bi-spotify mr-3"></i>
                         Iniciar sesión con Spotify
+                    </button>
+                    <button
+                        onClick={onNavigateToRegister}
+                        className="w-full py-2 bg-gray-500 hover:bg-gray-600 text-white rounded-lg transition-all"
+                    >
+                        Crear una cuenta
                     </button>
                 </div>
             </div>
         </div>
     );
 };
+
+export default LoginPage;
