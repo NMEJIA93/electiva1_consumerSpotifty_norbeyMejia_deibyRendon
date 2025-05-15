@@ -76,8 +76,6 @@ export const LoginPage = () => {
                     >
                         <i className="bi bi-facebook mr-3"></i>
                         Facebook
-                        <i className="bi bi-google mr-3"></i>
-                        Google
                     </button>
                     <button
                         onClick={loginWithSpotify}
