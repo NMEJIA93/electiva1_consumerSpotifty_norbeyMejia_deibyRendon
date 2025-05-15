@@ -4,6 +4,14 @@ import { HomePage } from '../spotifyConsumer/pages/HomePage'
 import { LoginPage } from '../auth/pages/LoginPage'
 import { UserPage } from '../spotifyConsumer/pages/UserPage'
 import { RegisterPage } from '../auth/pages/RegisterPage'
+import { useAuth } from '../auth/hooks/useAuth'
+
+const PrivateRoute = ({ children }) => {
+    const { user } = useAuth();
+    console.log(user, 'user en el router');
+    
+    return user ? children : <Navigate to="/login" />;
+};
 import { SpotifyCallback } from '../auth/components/SpotifyCallback'
 import { UserContext } from '../auth/context/UserContext'
 
@@ -17,14 +25,11 @@ export const AppRouter = () => {
         return (
             <>
                 <Routes>
-
                     <Route path="/" element={<HomePage />} />
                     <Route path="/login" element={<LoginPage />} />
                     <Route path="/register" element={<RegisterPage />} />
                     <Route path="/callback" element={<SpotifyCallback />} />
                     <Route path="/*" element={<Navigate to="/" />} />
-
-
                 </Routes>
             </>
         )
@@ -34,6 +39,9 @@ export const AppRouter = () => {
         <>
             <Routes>
                 <Route path="/userpage" element={<UserPage />} />
+                <Route path = "/register" element={<RegisterPage />} />
+                <Route path="/userpagelogin" element={<PrivateRoute><UserPage /></PrivateRoute>} />
+                <Route path="/*" element={<Navigate to="/" />} />
                 <Route path="/" element={<HomePage />} />
                 <Route path="/*" element={<Navigate to="/userpage" />} />
             </Routes>
