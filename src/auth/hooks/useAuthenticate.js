@@ -1,7 +1,46 @@
+import { useNavigate } from 'react-router-dom';
 import { fetchUserProfile, redirectToSpotifyLogin, exchangeCodeForToken } from '../../api/spotifyConsumer/auth/spotifyAuth'
 import { authTypes } from '../types/authTypes'
+import { signInWithGoogle, signInWithFacebook } from '../services/authService'
+
 
 export const useAuthenticate = (dispatch) => {
+
+  const navigate = useNavigate();
+  const onCancel = () => {
+    navigate('/', { replace: true });
+  };
+
+  const onLoginUser = () => {
+    navigate('/', { replace: true });
+  };
+
+  const handleGoogleCallback = async (setError) => {
+    try {
+      const user = await signInWithGoogle();
+      console.log('Usuario autenticado:', user);
+      navigate('/userpagelogin'); // Redirige al usuario a la página de usuario
+    } catch (error) {
+      console.error('Error al iniciar sesión con Google:', error);
+      setError('No se pudo iniciar sesión con Google. Inténtalo de nuevo.');
+    }
+  };
+
+  const onLoginWithFacebook = async (setError) => {
+    try {
+      const user = await signInWithFacebook();
+      console.log('Usuario autenticado con Facebook:', user);
+      navigate('/userpagelogin'); // Redirige al usuario a la página de usuario
+    } catch (error) {
+      console.error('Error al iniciar sesión con Facebook:', error);
+      setError('No se pudo iniciar sesión con Facebook. Inténtalo de nuevo.');
+    }
+  };
+
+  const onNavigateToRegister = () => {
+    navigate('/register', { replace: true });
+  };
+
   // login
   const login = (userData) => {
     const action = {
@@ -48,5 +87,17 @@ export const useAuthenticate = (dispatch) => {
   };
 
 
-  return { login, logout, loginWithSpotify,logoutWithSpotify  };
+
+
+  return {
+    login,
+    logout,
+    loginWithSpotify,
+    logoutWithSpotify,
+    onCancel,
+    onLoginUser,
+    handleGoogleCallback,
+    onLoginWithFacebook,
+    onNavigateToRegister,
+  };
 };
