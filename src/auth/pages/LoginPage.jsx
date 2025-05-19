@@ -6,13 +6,13 @@ import { UserContext } from '../context/UserContext';
 
 
 export const LoginPage = () => {
-    const { loginWithSpotify } = useContext(UserContext);
+    const { loginWithSpotify, handleGoogleCallback} = useContext(UserContext);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const {
         onCancel,
         onLoginUser,
-        handleGoogleCallback,
+       //handleGoogleCallback,
         onLoginWithFacebook,
         onNavigateToRegister,
     } = useAuthActions();

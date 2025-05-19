@@ -4,9 +4,8 @@ import { UserContext } from '../context/UserContext';
 import { useAuthenticate } from '../hooks/useAuthenticate';
 import { authTypes } from '../types/authTypes';
 import { UserProfileContext } from '../../spotifyConsumer/contexts/UserProfileContext';
-
-
 import { AuthContext } from '../context/UserContext';
+
 
 const authInitialState = {
     logged: false,
@@ -16,7 +15,7 @@ const authInitialState = {
 
 export const UserProvider = ({ children }) => {
     const [userState, dispatch] = useReducer(authReducer, authInitialState);
-    const { login, logout, loginWithSpotify,logoutWithSpotify } = useAuthenticate(dispatch);
+    const { login, logout, loginWithSpotify, logoutWithSpotify, handleGoogleCallback } = useAuthenticate(dispatch);
     const [isLoading, setIsLoading] = useState(true);
 
 
@@ -53,7 +52,7 @@ export const UserProvider = ({ children }) => {
             } catch (error) {
                 console.error('Error al sincronizar el estado del usuario:', error);
             } finally {
-                setIsLoading(false); 
+                setIsLoading(false);
             }
         };
 
@@ -75,7 +74,7 @@ export const UserProvider = ({ children }) => {
 
     return (
         <UserContext.Provider
-            value={{ userState, login, logout, loginWithSpotify,logoutWithSpotify }}
+            value={{ userState, login, logout, loginWithSpotify, logoutWithSpotify,handleGoogleCallback }}
         >
             {children}
         </UserContext.Provider>

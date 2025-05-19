@@ -5,6 +5,8 @@ import { LoginPage } from '../auth/pages/LoginPage'
 import { UserPage } from '../spotifyConsumer/pages/UserPage'
 import { RegisterPage } from '../auth/pages/RegisterPage'
 import { useAuth } from '../auth/hooks/useAuth'
+import { SpotifyCallback } from '../auth/components/SpotifyCallback'
+import { UserContext } from '../auth/context/UserContext'
 
 const PrivateRoute = ({ children }) => {
     const { user } = useAuth();
@@ -12,10 +14,6 @@ const PrivateRoute = ({ children }) => {
     
     return user ? children : <Navigate to="/login" />;
 };
-import { SpotifyCallback } from '../auth/components/SpotifyCallback'
-import { UserContext } from '../auth/context/UserContext'
-
-
 
 export const AppRouter = () => {
 
