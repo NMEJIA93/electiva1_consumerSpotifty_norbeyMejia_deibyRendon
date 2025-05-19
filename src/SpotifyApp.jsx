@@ -1,18 +1,21 @@
-import { UserProvider } from "./auth/context/UserProvider";
-import { UserProfileProvider } from "./spotifyConsumer/contexts/UserProfileProvider";
-import { AppRouter } from "./router/AppRouter";
-import { ThemeProvider } from "./context/ThemeContext.jsx";
+import { UserProvider } from './auth/context/UserProvider'
+import { UserProfileProvider } from './spotifyConsumer/contexts/UserProfileProvider'
+import { AuthProvider } from './auth/context/UserProvider'
+import { AppRouter } from './router/AppRouter'
 
 export const SpotifyApp = () => {
-  return (
-    <>
-      <ThemeProvider>
-        <UserProvider>
-          <UserProfileProvider>
-            <AppRouter />
-          </UserProfileProvider>
-        </UserProvider>
-      </ThemeProvider>
-    </>
-  );
-};
+    return (
+        <>
+            <UserProvider>
+                <AuthProvider>
+                    <UserProfileProvider>
+
+                        <AppRouter />
+
+                    </UserProfileProvider>
+                </AuthProvider>
+            </UserProvider>
+
+        </>
+    )
+}

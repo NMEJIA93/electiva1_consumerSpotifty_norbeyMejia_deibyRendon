@@ -9,22 +9,17 @@ import { useForm } from '../../hooks/useForm';
 
 
 export const LoginPage = () => {
-<<<<<<< HEAD
-    const { loginWithSpotify } = useContext(UserContext);
-    //const [email, setEmail] = useState('');
-    //const [password, setPassword] = useState('');
-=======
-    const { loginWithSpotify, handleGoogleCallback/*, onLoginWithFacebook*/} = useContext(UserContext);
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
->>>>>>> e9add46880e7de89ef3b1312ed11acf303a2192e
+    const { loginWithSpotify, handleGoogleCallback, onLoginWithFacebook} = useContext(UserContext);
+    const [email1, setEmail] = useState('');
+    const [password1, setPassword] = useState('');
     const {
         onCancel,
         onLoginUser,
        //handleGoogleCallback,
-        onLoginWithFacebook,
+        //onLoginWithFacebook,
         onNavigateToRegister,
     } = useAuthActions();
+
     const [isLoginOpen, setIsLoginOpen] = useState(false);
     const [isRegisterOpen, setIsRegisterOpen] = useState(false);
     const [isPasswordVisible, setIsPasswordVisible] = useState(false); 
@@ -262,6 +257,7 @@ export const LoginPage = () => {
                     </button>
                     <button
                       className="flex items-center justify-center bg-red-500 text-white p-3 rounded-lg hover:bg-red-600 transition w-full"
+                    onClick={handleGoogleCallback} 
                     >
                       <i className="bi bi-google"></i>
                     </button>
