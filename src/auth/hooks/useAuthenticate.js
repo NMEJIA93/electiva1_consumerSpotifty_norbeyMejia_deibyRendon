@@ -55,7 +55,28 @@ export const useAuthenticate = (dispatch) => {
     try {
       const user = await signInWithFacebook();
       console.log('Usuario autenticado con Facebook:', user);
-      navigate('/userpagelogin');
+      
+      const userData = {
+        country: user.country || 'CO',
+        email: user.email,
+        firstName: user.displayName || 'Name',
+        profilePicture: user.images?.[0]?.url || '',
+        followers: user.followers?.total || 0,
+        subscription: user.product || 'free',
+        profileLink: user.external_urls?.spotify || '',
+        type: user.type || 'user',
+        id: user.id || 'user',
+        artistsFollowers: user.artists?.items || [],
+      }
+      console.log('Objeto de usuario:', userData);
+      login(userData);
+      localStorage.setItem('userlogin', JSON.stringify(userData));
+      localStorage.setItem('logged', true);
+
+      setProfile(userData); 
+ 
+      navigate('/userpage');
+
     } catch (error) {
       console.error('Error al iniciar sesión con Facebook:', error);
       setError('No se pudo iniciar sesión con Facebook. Inténtalo de nuevo.');

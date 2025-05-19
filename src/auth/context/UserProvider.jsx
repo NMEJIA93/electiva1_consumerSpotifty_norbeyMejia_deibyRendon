@@ -15,7 +15,7 @@ const authInitialState = {
 
 export const UserProvider = ({ children }) => {
     const [userState, dispatch] = useReducer(authReducer, authInitialState);
-    const { login, logout, loginWithSpotify, logoutWithSpotify, handleGoogleCallback } = useAuthenticate(dispatch);
+    const { login, logout, loginWithSpotify, logoutWithSpotify, handleGoogleCallback,onLoginWithFacebook } = useAuthenticate(dispatch);
     const [isLoading, setIsLoading] = useState(true);
 
 
@@ -74,7 +74,7 @@ export const UserProvider = ({ children }) => {
 
     return (
         <UserContext.Provider
-            value={{ userState, login, logout, loginWithSpotify, logoutWithSpotify,handleGoogleCallback }}
+            value={{ userState, login, logout, loginWithSpotify, logoutWithSpotify,handleGoogleCallback,onLoginWithFacebook }}
         >
             {children}
         </UserContext.Provider>
