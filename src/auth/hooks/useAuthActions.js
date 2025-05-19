@@ -33,7 +33,7 @@ export const useAuthActions = () => {
     return {
         onCancel,
         onLoginUser,
-        onLoginWithFacebook,
+        //onLoginWithFacebook,
         onNavigateToRegister,
     };
 };
