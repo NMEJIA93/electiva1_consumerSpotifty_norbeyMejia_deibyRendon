@@ -25,11 +25,11 @@ export const AppRouter = () => {
         return (
             <>
                 <Routes>
-                    <Route path="/" element={<HomePage />} />
+                    <Route path="/" element={<LoginPage />} />
                     <Route path="/login" element={<LoginPage />} />
                     <Route path="/register" element={<RegisterPage />} />
                     <Route path="/callback" element={<SpotifyCallback />} />
-                    <Route path="/*" element={<Navigate to="/" />} />
+                    <Route path="/*" element={<Navigate to="/login" />} />
                 </Routes>
             </>
         )
@@ -41,8 +41,8 @@ export const AppRouter = () => {
                 <Route path="/userpage" element={<UserPage />} />
                 <Route path = "/register" element={<RegisterPage />} />
                 <Route path="/userpagelogin" element={<PrivateRoute><UserPage /></PrivateRoute>} />
-                <Route path="/*" element={<Navigate to="/" />} />
-                <Route path="/" element={<HomePage />} />
+                <Route path="/*" element={<Navigate to="/home" />} />
+                <Route path="/home" element={<HomePage />} />
                 <Route path="/*" element={<Navigate to="/userpage" />} />
             </Routes>
         </>

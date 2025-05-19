@@ -24,6 +24,7 @@ export const useAuthenticate = (dispatch) => {
 
   // Logout
   const logoutWithSpotify = () => {
+    console.log('Logout action');
     localStorage.removeItem('spotifyAccessToken');
     localStorage.removeItem('spotifyRefreshToken');
     localStorage.removeItem('spotifyTokenExpiration');
