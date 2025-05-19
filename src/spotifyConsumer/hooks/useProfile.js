@@ -51,7 +51,7 @@ export const useProfile = (dispatch) => {
     });
   };
 
-  const syncUserStateWithLocalStorage = () => {
+  const syncUserStateWithLocalStorage = async () => {
     const storedUser = getUserFromLocalStorage();
     if (storedUser) {
       updateGlobalStateWithUser(storedUser);
