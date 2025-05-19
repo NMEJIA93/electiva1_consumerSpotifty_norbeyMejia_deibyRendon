@@ -14,7 +14,7 @@ export const useAuthActions = () => {
         navigate('/userpage', { replace: true });
     };
     
-
+/*
     const handleGoogleCallback = async (setError) => {
         try {
             const user = await signInWithGoogle();
@@ -26,6 +26,8 @@ export const useAuthActions = () => {
         }
     };
 
+  */
+
     const onLoginWithFacebook = async (setError) => {
         try {
             const user = await signInWithFacebook();
@@ -36,10 +38,7 @@ export const useAuthActions = () => {
             setError('No se pudo iniciar sesión con Facebook. Inténtalo de nuevo.');
         }
     };
-
-    const onLoginWithSpotify = () => {
-        console.log('Iniciar sesión con Spotify');
-    };
+  
 
     const onNavigateToRegister = () => {
         navigate('/register', { replace: true });
@@ -48,9 +47,9 @@ export const useAuthActions = () => {
     return {
         onCancel,
         onLoginUser,
-        handleGoogleCallback,
+        //handleGoogleCallback,
         onLoginWithFacebook,
-        onLoginWithSpotify,
+        //onLoginWithSpotify,
         onNavigateToRegister,
     };
 };

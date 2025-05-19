@@ -57,7 +57,7 @@ export const UserPage = () => {
 
     const transformedUser = {
         firstName: profile.firstName || 'Usuario',
-        profilePicture: profile.profilePicture || '',
+        profilePicture: profile.profilePicture || userMock.profilePicture,
         email: profile.email || 'Correo no disponible',
         followers: profile.followers || 0,
         subscription: profile.subscription || 'free',

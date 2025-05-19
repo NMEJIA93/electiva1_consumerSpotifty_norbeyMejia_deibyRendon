@@ -9,13 +9,19 @@ import { useForm } from '../../hooks/useForm';
 
 
 export const LoginPage = () => {
+<<<<<<< HEAD
     const { loginWithSpotify } = useContext(UserContext);
     //const [email, setEmail] = useState('');
     //const [password, setPassword] = useState('');
+=======
+    const { loginWithSpotify, handleGoogleCallback/*, onLoginWithFacebook*/} = useContext(UserContext);
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+>>>>>>> e9add46880e7de89ef3b1312ed11acf303a2192e
     const {
         onCancel,
         onLoginUser,
-        handleGoogleCallback,
+       //handleGoogleCallback,
         onLoginWithFacebook,
         onNavigateToRegister,
     } = useAuthActions();
