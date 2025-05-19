@@ -14,7 +14,7 @@ export const useAuthActions = () => {
         navigate('/userpage', { replace: true });
     };
 
-
+    /*
     const onLoginWithFacebook = async (setError) => {
         try {
             const user = await signInWithFacebook();
@@ -25,6 +25,7 @@ export const useAuthActions = () => {
             setError('No se pudo iniciar sesión con Facebook. Inténtalo de nuevo.');
         }
     };
+    */
   
 
     const onNavigateToRegister = () => {
