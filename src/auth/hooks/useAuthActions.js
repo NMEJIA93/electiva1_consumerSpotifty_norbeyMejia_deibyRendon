@@ -10,11 +10,9 @@ export const useAuthActions = () => {
     };
 
    const onLoginUser = () => {
-
         navigate('/userpage', { replace: true });
     };
-
-    /*
+  /*
     const onLoginWithFacebook = async (setError) => {
         try {
             const user = await signInWithFacebook();
@@ -25,8 +23,8 @@ export const useAuthActions = () => {
             setError('No se pudo iniciar sesión con Facebook. Inténtalo de nuevo.');
         }
     };
+
     */
-  
 
     const onNavigateToRegister = () => {
         navigate('/register', { replace: true });
@@ -35,9 +33,7 @@ export const useAuthActions = () => {
     return {
         onCancel,
         onLoginUser,
-        //handleGoogleCallback,
-        //onLoginWithFacebook,
-        //onLoginWithSpotify,
+        onLoginWithFacebook,
         onNavigateToRegister,
     };
 };
