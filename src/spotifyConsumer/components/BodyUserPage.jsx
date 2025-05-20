@@ -154,7 +154,7 @@ export const BodyUserPage = ({ user, dataProfile, isDarkMode, dataPorfil }) => {
             </div>
             
             {/* Spotify Stats Section */}
-            {dataPorfil ? (
+            {dataProfile ? (
               <div className={`w-full rounded-2xl shadow-xl p-8 ${darkMode ? 'bg-gray-800' : 'bg-white'} border ${darkMode ? 'border-gray-700' : 'border-gray-200'} transition-colors duration-300`}>
                 <h1 className="text-3xl font-bold mb-8 pb-4 border-b ${darkMode ? 'border-gray-700' : 'border-gray-300'}">Estadísticas de Spotify</h1>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
