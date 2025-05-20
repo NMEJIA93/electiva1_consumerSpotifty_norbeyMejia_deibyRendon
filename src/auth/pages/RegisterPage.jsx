@@ -1,6 +1,4 @@
-import React from 'react';
 import { RegisterForm } from '../components/RegisterForm';
-import { FormActions } from '../components/FormActions';
 import Bacground from '../../assets/backgroundGreen.png'
 
 export const RegisterPage = () => {

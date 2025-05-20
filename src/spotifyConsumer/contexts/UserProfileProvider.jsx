@@ -19,7 +19,7 @@ export const UserProfileProvider = ({ children }) => {
 
     useEffect(() => {
         if (allowedRoutes.includes(location.pathname)) {
-            syncUserStateWithLocalStorage();
+             syncUserStateWithLocalStorage();
             //setIsLoading(false);
         }
     }, [location.pathname]); 
