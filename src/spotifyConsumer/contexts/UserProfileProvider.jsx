@@ -6,7 +6,6 @@ import { useProfile } from '../hooks/useProfile'
 
 const initialProfileState = {
     profile: null,
-    playlists: [],
     error: null,
 };
 

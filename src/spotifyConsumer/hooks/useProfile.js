@@ -1,7 +1,28 @@
-import { fetchUserProfile, getSpotifyArtistsFollowers } from '../../api/spotifyConsumer/auth/spotifyAuth'
+import { fetchUserProfile, getSpotifyArtistsFollowers, getSpotifyPlaylistsUser } from '../../api/spotifyConsumer/auth/spotifyAuth'
 import { actionTypes } from '../types/actionsTypes'
 
 export const useProfile = (dispatch) => {
+
+  const getSpotifyPlaylistsUser2 = async () => {
+    try {
+      const accessToken = validateAccessToken();
+      const userProfile = await fetchUserProfile(accessToken);
+      const userID = userProfile.id;
+      const playlists = await getSpotifyPlaylistsUser(accessToken);
+
+
+      const playlistsPropias = playlists.items.filter(playlist => playlist.owner.id === userID);
+      console.log('Playlists propias:', playlistsPropias);
+
+    } catch (error) {
+      console.error('Error al obtener play list del usuario del usuario:', error);
+      dispatch({
+        type: actionTypes.SET_ERROR,
+        payload: 'Error al obtener el perfil del usuario en getSpotifyProfile.',
+      });
+      throw error;
+    }
+  }
 
   const getSpotifyProfile = async () => {
     try {
@@ -9,7 +30,35 @@ export const useProfile = (dispatch) => {
       const userProfile = await fetchUserProfile(accessToken);
       const artistsFollowers = await getSpotifyArtistsFollowers(accessToken);
 
-      console.log('Perfil de usuario desde useProfile:', userProfile);
+
+      console.log('Perfil de usuario desde useProfile: ---------------------------------------> ', userProfile);
+
+      console.log('')
+      console.log('')
+      console.log('')
+      console.log('')
+
+      const playlists = await getSpotifyPlaylistsUser(accessToken);
+      console.log('Playlists propias de usuario desde useProfile:-----------------------------------------------', playlists);
+
+      console.log("")
+      console.log("")
+      console.log("")
+      const userID = userProfile.id;
+      const ownPlaylists = playlists.items.filter(playlist => playlist.owner.id === userID);
+      console.log('Playlists propias:', ownPlaylists);
+
+      console.log("")
+      console.log("")
+      console.log("")
+
+     const followedPlaylists = playlists.items.filter(playlist => playlist.owner.id !== userID);
+      console.log('Playlists Seguidas:', followedPlaylists);
+            console.log("")
+      console.log("")
+      console.log("")
+
+
 
       const user = {
         country: userProfile.country,
@@ -22,6 +71,9 @@ export const useProfile = (dispatch) => {
         type: userProfile.type || 'user',
         id: userProfile.id || 'user',
         artistsFollowers: artistsFollowers.artists.items || [],
+        ownPlaylists: ownPlaylists || [],
+        followedPlaylists: followedPlaylists || [],
+        connectWithSpotify: true,
       }
 
       dispatch({
@@ -57,13 +109,13 @@ export const useProfile = (dispatch) => {
       updateGlobalStateWithUser(storedUser);
     }
   };
-  
+
   const getUserFromLocalStorage = () => {
     const storedUser = localStorage.getItem('userlogin');
     const isLogged = localStorage.getItem('logged') === 'true';
     return storedUser && isLogged ? JSON.parse(storedUser) : null;
   };
-  
+
   const updateGlobalStateWithUser = (user) => {
     dispatch({
       type: actionTypes.SET_PROFILE,

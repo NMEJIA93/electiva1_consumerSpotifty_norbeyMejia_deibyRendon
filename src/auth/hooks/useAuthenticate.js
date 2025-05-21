@@ -8,7 +8,7 @@ import { useProfile } from '../../spotifyConsumer/hooks/useProfile'
 export const useAuthenticate = (dispatch) => {
 
   const navigate = useNavigate();
-  const { syncUserStateWithLocalStorage,setProfile } = useProfile(dispatch);
+  const { syncUserStateWithLocalStorage, setProfile } = useProfile(dispatch);
 
 
   const onCancel = () => {
@@ -35,14 +35,17 @@ export const useAuthenticate = (dispatch) => {
         type: user.type || 'user',
         id: user.id || 'user',
         artistsFollowers: user.artists?.items || [],
+        ownPlaylists: user.ownPlaylists || [],
+        followedPlaylists: user.followedPlaylists || [],
+        connectWithSpotify: false,
       }
       console.log('Objeto de usuario:', userData);
       login(userData);
       localStorage.setItem('userlogin', JSON.stringify(userData));
       localStorage.setItem('logged', true);
 
-      setProfile(userData); 
- 
+      setProfile(userData);
+
       navigate('/userpage');
 
     } catch (error) {
@@ -55,7 +58,7 @@ export const useAuthenticate = (dispatch) => {
     try {
       const user = await signInWithFacebook();
       console.log('Usuario autenticado con Facebook:', user);
-      
+
       const userData = {
         country: user.country || 'CO',
         email: user.email,
@@ -73,8 +76,8 @@ export const useAuthenticate = (dispatch) => {
       localStorage.setItem('userlogin', JSON.stringify(userData));
       localStorage.setItem('logged', true);
 
-      setProfile(userData); 
- 
+      setProfile(userData);
+
       navigate('/userpage');
 
     } catch (error) {
