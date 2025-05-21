@@ -4,10 +4,15 @@ import { PublicNavbar } from '../components/PublicNavbar';
 import { PrivateNavbar } from '../components/PrivateNavbar';
 import { Hero } from '../components/Hero'
 import { useContext } from 'react';
-import { UserContext } from '../../auth/context/UserContext';
+import { UserProfileContext } from '../contexts/UserProfileContext'
+
+
 
 export const HomePage = () => {
-  const { userState } = useContext(UserContext); // Obtén el estado del usuario
+    const { profileState } = useContext(UserProfileContext);
+    const { profile, errorMessage: error } = profileState;
+    console.log('Estado global del perfil:', profileState);
+    console.log('Perfil del usuario:', profile);
 
   return (
     <>

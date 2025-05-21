@@ -13,6 +13,9 @@ export const Hero = () => {
   const { profileState } = useContext(UserProfileContext);
   const { profile, errorMessage: error } = profileState;
 
+  console.log('Estado global del perfil:', profileState);
+  console.log('Perfil del usuario:*************************', profile);
+
   useEffect(() => {
     document.documentElement.classList.toggle("dark", isDarkMode);
     localStorage.setItem("theme", isDarkMode ? "dark" : "light");
