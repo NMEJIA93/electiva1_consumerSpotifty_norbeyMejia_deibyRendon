@@ -64,6 +64,8 @@ export const UserPage = () => {
         profileLink: profile.profileLink || 'https://www.spotify.com',
         artistsFollowers: profile.artistsFollowers || [],
         country: profile.country || 'No disponible',
+        ownPlaylists: profile.ownPlaylists || [],
+        followedPlaylists: profile.followedPlaylists || [],
     };
 
     return (
