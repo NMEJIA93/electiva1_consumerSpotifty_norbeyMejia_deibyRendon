@@ -15,6 +15,7 @@ export const PrivateNavbar = () => {
   const { isDarkMode, toggleTheme } = useTheme();
   const { profileState } = useContext(UserProfileContext);
   const { profile, errorMessage: error } = profileState;
+  if (!profile) return <h1>loading...</h1>
   console.log("Estado global del perfil:", profileState);
 
   const toggleMenu = () => setIsOpen(!isOpen);
@@ -83,13 +84,13 @@ export const PrivateNavbar = () => {
           {/* Logo y estado */}
           <div className="flex items-center space-x-2">
             <img
-              src={profileState ? Logo : Logo2}
+              src={profile.connectWithSpotify  ? Logo : Logo2}
               alt="Logo"
               className="w-[30px]"
             />
             <span
               className={`text-sm font-bold ${
-                profileState
+                profile.connectWithSpotify
                   ? isDarkMode
                     ? "text-red-500"
                     : "text-red-600"
@@ -98,7 +99,7 @@ export const PrivateNavbar = () => {
                   : "text-orange-600"
               }`}
             >
-              {profileState ? "ONLINE" : "OFFLINE"}
+              {profile.connectWithSpotify  ? "ONLINE" : "OFFLINE"}
             </span>
           </div>
 

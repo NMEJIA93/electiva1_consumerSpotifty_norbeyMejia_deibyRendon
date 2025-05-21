@@ -16,7 +16,6 @@ export const UserPage = () => {
     const { profile, errorMessage: error } = profileState;
     const { isDarkMode } = useTheme();
     console.log('Estado global del perfil:', profileState);
-    console.log('Perfil del usuario:', dataPorfil);
 
 
 
@@ -66,6 +65,7 @@ export const UserPage = () => {
         country: profile.country || 'No disponible',
         ownPlaylists: profile.ownPlaylists || [],
         followedPlaylists: profile.followedPlaylists || [],
+        connectWithSpotify: profile.connectWithSpotify || false,
     };
 
     return (
