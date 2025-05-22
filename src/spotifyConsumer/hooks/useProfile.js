@@ -1,4 +1,11 @@
-import { fetchUserProfile, getSpotifyArtistsFollowers, getSpotifyPlaylistsUser } from '../../api/spotifyConsumer/auth/spotifyAuth'
+import {
+  fetchUserProfile,
+  getSpotifyArtistsFollowers,
+  getSpotifyPlaylistsUser,
+  getSpotifyArtistTopUser,
+  getSpotifyTrackTopsUser
+} from '../../api/spotifyConsumer/auth/spotifyAuth'
+
 import { actionTypes } from '../types/actionsTypes'
 
 export const useProfile = (dispatch) => {
@@ -29,34 +36,15 @@ export const useProfile = (dispatch) => {
       const accessToken = validateAccessToken();
       const userProfile = await fetchUserProfile(accessToken);
       const artistsFollowers = await getSpotifyArtistsFollowers(accessToken);
-
-
-      console.log('Perfil de usuario desde useProfile: ---------------------------------------> ', userProfile);
-
-      console.log('')
-      console.log('')
-      console.log('')
-      console.log('')
-
       const playlists = await getSpotifyPlaylistsUser(accessToken);
-      console.log('Playlists propias de usuario desde useProfile:-----------------------------------------------', playlists);
+      const artistsTop = await setSpotifyArtistTopUser(accessToken);
+      const tracksTop = await setSpotifyTrackTopsUser(accessToken);
 
-      console.log("")
-      console.log("")
-      console.log("")
+      console.log('Canciones más escuchados:///////////////////////////////////', tracksTop);
+
       const userID = userProfile.id;
       const ownPlaylists = playlists.items.filter(playlist => playlist.owner.id === userID);
-      console.log('Playlists propias:', ownPlaylists);
-
-      console.log("")
-      console.log("")
-      console.log("")
-
-     const followedPlaylists = playlists.items.filter(playlist => playlist.owner.id !== userID);
-      console.log('Playlists Seguidas:', followedPlaylists);
-            console.log("")
-      console.log("")
-      console.log("")
+      const followedPlaylists = playlists.items.filter(playlist => playlist.owner.id !== userID);
 
 
 
@@ -74,6 +62,7 @@ export const useProfile = (dispatch) => {
         ownPlaylists: ownPlaylists || [],
         followedPlaylists: followedPlaylists || [],
         connectWithSpotify: true,
+        artistsTop: artistsTop || [],
       }
 
       dispatch({
@@ -94,6 +83,68 @@ export const useProfile = (dispatch) => {
     }
   };
 
+  const setSpotifyArtistTopUser = async (accessToken) => {
+    try {
+      const artistTop = await getSpotifyArtistTopUser(accessToken);
+
+      const artists = artistTop.items.map(artist => ({
+        name: artist.name,
+        image: artist.images?.[0]?.url || '',
+        followers: artist.followers?.total || 0,
+        genres: artist.genres || [],
+        popularity: artist.popularity || 0,
+        id: artist.id || 'artist',
+        profileLink: artist.external_urls?.spotify || '',
+      }));
+
+      return artists;
+
+    } catch (error) {
+      console.error('Error al obtener los artistas más escuchados del usuario:', error);
+      dispatch({
+        type: actionTypes.SET_ERROR,
+        payload: 'Error al obtener los artistas más escuchados del usuario.',
+      });
+      throw error;
+    }
+
+  }
+
+  const setSpotifyTrackTopsUser = async (accessToken) => {
+    try {
+      const tracks = await getSpotifyTrackTopsUser(accessToken);
+      console.log('');
+      console.log('');
+      console.log('');
+      console.log('');
+
+      console.log('Canciones más escuchados:*******************************', tracks);
+      console.log('');
+      console.log('');
+      console.log('');
+      console.log('');
+
+      const trackTop = tracks.items.map(item => ({
+        name: item.track.name,
+        artist: item.track.artists.map(artist => artist.name).join(', '),
+        duration: item.track.duration_ms,
+
+      }));
+      console.log('Canciones más escuchados:///////////////////////////////////', trackTop);
+      console.log('');
+      console.log('');
+      console.log('');
+      console.log('');
+      return trackTop;
+    } catch (error) {
+      console.error('Error al obtener las canciones más escuchadas del usuario:', error);
+      dispatch({
+        type: actionTypes.SET_ERROR,
+        payload: 'Error al obtener las canciones más escuchadas del usuario.',
+      });
+      throw error;
+    }
+  }
 
   const setProfile = (profile) => {
     console.log("log desde ser profile ----------------", profile)
