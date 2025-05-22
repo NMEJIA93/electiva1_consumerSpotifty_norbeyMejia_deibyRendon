@@ -6,47 +6,23 @@ import {
   getSpotifyTrackTopsUser
 } from '../../api/spotifyConsumer/auth/spotifyAuth'
 
+import {useManagementLocalStorage} from '../../hooks/useManagementLocalStorage'
+
 import { actionTypes } from '../types/actionsTypes'
 
 export const useProfile = (dispatch) => {
-
-  const getSpotifyPlaylistsUser2 = async () => {
-    try {
-      const accessToken = validateAccessToken();
-      const userProfile = await fetchUserProfile(accessToken);
-      const userID = userProfile.id;
-      const playlists = await getSpotifyPlaylistsUser(accessToken);
-
-
-      const playlistsPropias = playlists.items.filter(playlist => playlist.owner.id === userID);
-      console.log('Playlists propias:', playlistsPropias);
-
-    } catch (error) {
-      console.error('Error al obtener play list del usuario del usuario:', error);
-      dispatch({
-        type: actionTypes.SET_ERROR,
-        payload: 'Error al obtener el perfil del usuario en getSpotifyProfile.',
-      });
-      throw error;
-    }
-  }
+  const { clearLocalStorage } = useManagementLocalStorage();
 
   const getSpotifyProfile = async () => {
     try {
       const accessToken = validateAccessToken();
       const userProfile = await fetchUserProfile(accessToken);
-      const artistsFollowers = await getSpotifyArtistsFollowers(accessToken);
-      const playlists = await getSpotifyPlaylistsUser(accessToken);
+      const artistsFollowers = await setSpotifyArtistsFollowers(accessToken);
+      const { ownPlaylists, followedPlaylists } = await setSpotifyPlaylistsUser(accessToken, userProfile.id);
       const artistsTop = await setSpotifyArtistTopUser(accessToken);
       const tracksTop = await setSpotifyTrackTopsUser(accessToken);
-
-      console.log('Canciones más escuchados:///////////////////////////////////', tracksTop);
-
-      const userID = userProfile.id;
-      const ownPlaylists = playlists.items.filter(playlist => playlist.owner.id === userID);
-      const followedPlaylists = playlists.items.filter(playlist => playlist.owner.id !== userID);
-
-
+      const favoriteGenres = getFavoriteGenres(artistsTop);
+      
 
       const user = {
         country: userProfile.country,
@@ -58,11 +34,13 @@ export const useProfile = (dispatch) => {
         profileLink: userProfile.external_urls?.spotify || '',
         type: userProfile.type || 'user',
         id: userProfile.id || 'user',
-        artistsFollowers: artistsFollowers.artists.items || [],
+        artistsFollowers: artistsFollowers || [],
         ownPlaylists: ownPlaylists || [],
         followedPlaylists: followedPlaylists || [],
         connectWithSpotify: true,
         artistsTop: artistsTop || [],
+        tracksTop: tracksTop || [],
+        favoriteGenres: favoriteGenres || [],
       }
 
       dispatch({
@@ -82,6 +60,39 @@ export const useProfile = (dispatch) => {
       throw error;
     }
   };
+
+  const setSpotifyArtistsFollowers = async (accessToken) => {
+    try {
+      const artistsFollowers = await getSpotifyArtistsFollowers(accessToken);
+      return artistsFollowers.artists.items;
+    } catch (error) {
+      console.error('Error al obtener los artistas seguidos:', error);
+      dispatch({
+        type: actionTypes.SET_ERROR,
+        payload: 'Error al obtener los artistas seguidos.',
+      });
+      throw error;
+    }
+  }
+
+  const setSpotifyPlaylistsUser = async (accessToken, UserId) => {
+    try {
+      const playlists = await getSpotifyPlaylistsUser(accessToken);
+      const ownPlaylists = playlists.items.filter(playlist => playlist.owner.id === UserId);
+      const followedPlaylists = playlists.items.filter(playlist => playlist.owner.id !== UserId);
+
+      return { ownPlaylists, followedPlaylists };
+
+    } catch (error) {
+      console.error('Error al obtener las play list del usuario:', error);
+      dispatch({
+        type: actionTypes.SET_ERROR,
+        payload: 'Error al obtener las play list del usuario.',
+      });
+      throw error;
+    }
+
+  }
 
   const setSpotifyArtistTopUser = async (accessToken) => {
     try {
@@ -113,29 +124,17 @@ export const useProfile = (dispatch) => {
   const setSpotifyTrackTopsUser = async (accessToken) => {
     try {
       const tracks = await getSpotifyTrackTopsUser(accessToken);
-      console.log('');
-      console.log('');
-      console.log('');
-      console.log('');
-
-      console.log('Canciones más escuchados:*******************************', tracks);
-      console.log('');
-      console.log('');
-      console.log('');
-      console.log('');
 
       const trackTop = tracks.items.map(item => ({
         name: item.track.name,
         artist: item.track.artists.map(artist => artist.name).join(', '),
-        duration: item.track.duration_ms,
+        duration: msToMinutesAndSeconds(item.track.duration_ms),
+        album: item.track.album.name,
 
       }));
-      console.log('Canciones más escuchados:///////////////////////////////////', trackTop);
-      console.log('');
-      console.log('');
-      console.log('');
-      console.log('');
+
       return trackTop;
+
     } catch (error) {
       console.error('Error al obtener las canciones más escuchadas del usuario:', error);
       dispatch({
@@ -186,13 +185,25 @@ export const useProfile = (dispatch) => {
     return accessToken;
   };
 
-  const clearLocalStorage = () => {
-    localStorage.removeItem('spotifyAccessToken');
-    localStorage.removeItem('spotifyRefreshToken');
-    localStorage.removeItem('spotifyTokenExpiration');
-    localStorage.removeItem('userlogin');
-    localStorage.removeItem('logged');
-  };
+
 
   return { getSpotifyProfile, setProfile, syncUserStateWithLocalStorage };
 };
+
+const msToMinutesAndSeconds = (ms) => {
+  const totalSeconds = Math.floor(ms / 1000);
+  const minutes = Math.floor(totalSeconds / 60);
+  const seconds = totalSeconds % 60;
+  // Asegura que los segundos siempre tengan dos dígitos
+  return `${minutes}:${seconds.toString().padStart(2, '0')}`;
+};
+
+
+const getFavoriteGenres = (artistsTop) => {
+
+  const allGenres = artistsTop.flatMap(artist => artist.genres || []);
+  const uniqueGenres = [...new Set(allGenres)];
+  return uniqueGenres;
+
+};
+

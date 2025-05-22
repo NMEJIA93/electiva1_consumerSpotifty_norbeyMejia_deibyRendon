@@ -3,10 +3,10 @@ import { fetchUserProfile, redirectToSpotifyLogin, exchangeCodeForToken } from '
 import { authTypes } from '../types/authTypes'
 import { signInWithGoogle, signInWithFacebook } from '../services/authService'
 import { useProfile } from '../../spotifyConsumer/hooks/useProfile'
-
+import { useManagementLocalStorage } from '../../hooks/useManagementLocalStorage'
 
 export const useAuthenticate = (dispatch) => {
-
+  const { clearLocalStorage } = useManagementLocalStorage();
   const navigate = useNavigate();
   const { syncUserStateWithLocalStorage, setProfile } = useProfile(dispatch);
 
@@ -113,11 +113,7 @@ export const useAuthenticate = (dispatch) => {
   // Logout
   const logoutWithSpotify = () => {
     console.log('Logout action');
-    localStorage.removeItem('spotifyAccessToken');
-    localStorage.removeItem('spotifyRefreshToken');
-    localStorage.removeItem('spotifyTokenExpiration');
-    localStorage.removeItem('userlogin');
-    localStorage.removeItem('logged');
+    clearLocalStorage();
 
     dispatch({ type: authTypes.logout });
   };
