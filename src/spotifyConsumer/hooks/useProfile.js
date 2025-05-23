@@ -124,12 +124,15 @@ export const useProfile = (dispatch) => {
   const setSpotifyTrackTopsUser = async (accessToken) => {
     try {
       const tracks = await getSpotifyTrackTopsUser(accessToken);
+      console.log('Tracks:', tracks);
 
       const trackTop = tracks.items.map(item => ({
         name: item.track.name,
         artist: item.track.artists.map(artist => artist.name).join(', '),
         duration: msToMinutesAndSeconds(item.track.duration_ms),
         album: item.track.album.name,
+        image: item.track.album.images?.[0]?.url || '',
+        link: item.track.external_urls?.spotify || '',
 
       }));
 

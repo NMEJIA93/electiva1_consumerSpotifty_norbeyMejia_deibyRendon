@@ -260,9 +260,9 @@ export const BodyUserPage = ({ user, dataProfile, isDarkMode, dataPorfil }) => {
                         >
                           {artist.genres.slice(0, 2).join(", ")}
                         </p>
-                        <div className="flex items-center justify-between mt-3">
+                        <div className="flex flex-wrap items-center justify-between mt-3 gap-2">
                           <span
-                            className={`text-xs ${
+                            className={`text-xs whitespace-nowrap ${
                               darkMode ? "text-gray-400" : "text-gray-600"
                             }`}
                           >
@@ -272,7 +272,7 @@ export const BodyUserPage = ({ user, dataProfile, isDarkMode, dataPorfil }) => {
                             href={artist.external_urls.spotify}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="text-green-600 hover:text-green-700 text-xs font-semibold flex items-center gap-1"
+                            className="text-green-600 hover:text-green-700 text-xs font-semibold flex items-center gap-1 whitespace-nowrap"
                           >
                             Ver
                             <svg
@@ -381,7 +381,7 @@ export const BodyUserPage = ({ user, dataProfile, isDarkMode, dataPorfil }) => {
                       <h3 className="text-xl font-semibold">Playlists</h3>
                     </div>
                     <p className="text-4xl font-bold text-green-500">
-                      {dataPorfil?.stats?.numberPlayList || 0}
+                      {user?.ownPlaylists?.length || 0}
                     </p>
                     <p
                       className={`text-sm mt-2 ${
@@ -433,7 +433,7 @@ export const BodyUserPage = ({ user, dataProfile, isDarkMode, dataPorfil }) => {
                       </h3>
                     </div>
                     <div className="flex flex-wrap gap-3 mt-3">
-                      {dataPorfil?.stats?.favoriteGenre
+                      {user?.favoriteGenres
                         ?.slice(0, 3)
                         .map((genre, index) => (
                           <span
@@ -495,21 +495,24 @@ export const BodyUserPage = ({ user, dataProfile, isDarkMode, dataPorfil }) => {
                       </h3>
                     </div>
                     <div className="space-y-3">
-                      {dataPorfil?.stats?.FavoriteArtist?.slice(0, 3).map(
+                      {user?.artistsTop?.slice(0, 3).map(
                         (artist, index) => (
                           <div key={index} className="flex items-center gap-3">
-                            <span
-                              className={`w-3 h-3 rounded-full ${
-                                darkMode ? "bg-yellow-500" : "bg-yellow-400"
-                              } shadow-sm`}
-                            ></span>
-                            <p
-                              className={`text-sm ${
+                            <img
+                              src={artist.image || ""}
+                              alt={artist.name}
+                              className="w-8 h-8 rounded-full object-cover border border-gray-300 shadow-sm"
+                            />
+                            <a
+                              href={artist.profileLink}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className={`text-sm hover:underline ${
                                 darkMode ? "text-gray-300" : "text-gray-700"
                               }`}
                             >
-                              {artist}
-                            </p>
+                              {artist.name}
+                            </a>
                           </div>
                         )
                       )}
@@ -566,12 +569,12 @@ export const BodyUserPage = ({ user, dataProfile, isDarkMode, dataPorfil }) => {
                         Últimas Reproducciones
                       </h3>
                     </div>
-                    {dataPorfil?.stats?.recentPlayback &&
-                    dataPorfil.stats.recentPlayback.length > 0 ? (
+                    {user?.tracksTop &&
+                    user?.tracksTop.length > 0 ? (
                       <ul className="space-y-4">
-                        {dataPorfil.stats.recentPlayback
+                        {user?.tracksTop
                           .slice(0, 2)
-                          .map((song, index) => (
+                          .map((tracksTop, index) => (
                             <li key={index} className="flex items-center gap-4">
                               <div
                                 className={`w-12 h-12 rounded-md overflow-hidden border ${
@@ -580,24 +583,24 @@ export const BodyUserPage = ({ user, dataProfile, isDarkMode, dataPorfil }) => {
                                     : "bg-white border-gray-200"
                                 } shadow-sm`}
                               >
-                                {song.cover && (
+                                {tracksTop.cover && (
                                   <img
-                                    src={song.cover}
-                                    alt={song.title}
+                                    src={tracksTop.cover}
+                                    alt={tracksTop.name}
                                     className="w-full h-full object-cover"
                                   />
                                 )}
                               </div>
                               <div className="flex-1 min-w-0">
                                 <p className="font-medium truncate text-blue-500">
-                                  {song.title}
+                                  {tracksTop.name}
                                 </p>
                                 <p
                                   className={`text-xs truncate ${
                                     darkMode ? "text-gray-400" : "text-gray-600"
                                   }`}
                                 >
-                                  {song.artist} • {song.album}
+                                  {tracksTop.artist} • {tracksTop.album}
                                 </p>
                               </div>
                               <span
@@ -605,7 +608,7 @@ export const BodyUserPage = ({ user, dataProfile, isDarkMode, dataPorfil }) => {
                                   darkMode ? "text-gray-500" : "text-gray-600"
                                 }`}
                               >
-                                {song.duration}
+                                {tracksTop.duration}
                               </span>
                             </li>
                           ))}

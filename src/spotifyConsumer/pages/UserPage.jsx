@@ -66,6 +66,9 @@ export const UserPage = () => {
         ownPlaylists: profile.ownPlaylists || [],
         followedPlaylists: profile.followedPlaylists || [],
         connectWithSpotify: profile.connectWithSpotify || false,
+        favoriteGenres: profile.favoriteGenres || [],
+        artistsTop: profile.artistsTop || [],
+        tracksTop: profile.tracksTop || [],
     };
 
     return (
