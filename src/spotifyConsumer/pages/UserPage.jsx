@@ -15,8 +15,8 @@ export const UserPage = () => {
     const { profileState } = useContext(UserProfileContext);
     const { profile, errorMessage: error } = profileState;
     const { isDarkMode } = useTheme();
-    console.log('Estado global del perfil:', profileState);
-    console.log('Perfil del usuario:', dataPorfil);
+    //console.log('Estado global del perfil:', profileState);
+    //console.log('Perfil del usuario:', dataPorfil);
 
 
 

@@ -124,7 +124,6 @@ export const useProfile = (dispatch) => {
   const setSpotifyTrackTopsUser = async (accessToken) => {
     try {
       const tracks = await getSpotifyTrackTopsUser(accessToken);
-      console.log('Tracks:', tracks);
 
       const trackTop = tracks.items.map(item => ({
         name: item.track.name,
