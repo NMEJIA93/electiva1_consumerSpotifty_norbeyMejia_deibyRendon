@@ -22,7 +22,11 @@ export const Hero = () => {
     localStorage.setItem("theme", isDarkMode ? "dark" : "light");
   }, [isDarkMode]);
 
-  if (!profile) return <h1>loading...</h1>
+  if (!profile) return 
+  <div className="flex flex-col items-center">
+          <div className="w-12 h-12 border-4 border-red-700 border-t-transparent rounded-full animate-spin"></div>
+          <p className="text-lg mt-4">Cargando...</p>
+        </div>
 
   // Usar playlists del perfil si están disponibles, sino usar los mocks
   const userOwnPlaylists = profile?.ownPlaylists || ownPlaylists || [];
@@ -80,8 +84,10 @@ export const Hero = () => {
           </div>
 
           {/* Playlists sections */}
+          
           <div className="space-y-10">
             {/* Own playlists section */}
+            {filteredOwnPlaylists.length > 0 && (
             <section className="mb-8">
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center">
@@ -173,6 +179,7 @@ export const Hero = () => {
                 </div>
               )}
             </section>
+            )}
 
             {/* Followed playlists section */}
             {filteredFollowedPlaylists.length > 0 && (
@@ -312,7 +319,7 @@ export const Hero = () => {
                         }`}>
                           <h3 className="text-lg font-bold truncate">{playlist.name}</h3>
                         </div>
-                        {profileState && (
+                        {profile.connectWithSpotify && (
                           <button
                             className={`absolute top-2 right-2 w-8 h-8 rounded-full flex items-center justify-center ${
                               isDarkMode 
@@ -372,7 +379,7 @@ export const Hero = () => {
               <div className="space-y-4">
                 <div className="relative">
                   <img
-                    src={selectedPlaylist.images[0].url}
+                    src={selectedPlaylist.cover? selectedPlaylist.cover : selectedPlaylist.images[0].url}
                     alt={selectedPlaylist.name}
                     className="w-full rounded-lg shadow-lg mb-4"
                   />
@@ -408,7 +415,7 @@ export const Hero = () => {
                       <span className={isDarkMode ? 'text-gray-300' : 'text-gray-700'}>Seguidores:</span> {selectedPlaylist.followers}
                     </p>
                     <p className="text-sm font-medium">
-                      <span className={isDarkMode ? 'text-gray-300' : 'text-gray-700'}>Canciones:</span> {selectedPlaylist.tracks.total}
+                      <span className={isDarkMode ? 'text-gray-300' : 'text-gray-700'}>Canciones:</span> {selectedPlaylist.songs ? selectedPlaylist.songs.length : selectedPlaylist.tracks?.total}
                     </p>
                   </div>
                   <p className="text-sm">

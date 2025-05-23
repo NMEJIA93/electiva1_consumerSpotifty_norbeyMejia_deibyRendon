@@ -16,10 +16,9 @@ export const HomePage = () => {
 
   return (
     <>
-      <div className="bg-spotify-green relative overflow-hidden min-h-screen">
+      <div className="bg-black relative overflow-hidden min-h-screen">
         <div
           className="relative z-10 min-h-screen bg-center bg-no-repeat sm:bg-cover md:bg-cover"
-          style={{ backgroundImage: `url(${Bacground})` }}
         >
           <PrivateNavbar />
           <Hero />

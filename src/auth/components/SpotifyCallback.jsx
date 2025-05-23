@@ -66,7 +66,7 @@ export const SpotifyCallback = () => {
         <ErrorDisplay error={error} navigate={navigate} />
       ) : (
         <div className="flex flex-col items-center">
-          <div className="w-12 h-12 border-4 border-spotify-green border-t-transparent rounded-full animate-spin"></div>
+          <div className="w-12 h-12 border-4 border-red-600 border-t-transparent rounded-full animate-spin"></div>
           <p className="text-lg mt-4">Cargando...</p>
         </div>
       )}

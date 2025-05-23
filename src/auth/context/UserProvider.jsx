@@ -64,7 +64,7 @@ export const UserProvider = ({ children }) => {
             <div className="min-h-screen flex flex-col items-center justify-center bg-spotify-black text-white">
                 <div className="flex flex-col items-center">
                     {/* Spinner animado */}
-                    <div className="w-12 h-12 border-4 border-spotify-green border-t-transparent rounded-full animate-spin"></div>
+                    <div className="w-12 h-12 border-4 border-red-600 border-t-transparent rounded-full animate-spin"></div>
                     {/* Texto de carga */}
                     <p className="text-lg mt-4 text-spotify-gray">Cargando...</p>
                 </div>

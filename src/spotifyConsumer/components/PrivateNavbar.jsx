@@ -15,7 +15,11 @@ export const PrivateNavbar = () => {
   const { isDarkMode, toggleTheme } = useTheme();
   const { profileState } = useContext(UserProfileContext);
   const { profile, errorMessage: error } = profileState;
-  if (!profile) return <h1>loading...</h1>
+  if (!profile) return;
+  <div className="flex flex-col items-center">
+    <div className="w-12 h-12 border-4 border-red-700 border-t-transparent rounded-full animate-spin"></div>
+    <p className="text-lg mt-4">Cargando...</p>
+  </div>;
   console.log("Estado global del perfil:", profileState);
 
   const toggleMenu = () => setIsOpen(!isOpen);
@@ -84,7 +88,7 @@ export const PrivateNavbar = () => {
           {/* Logo y estado */}
           <div className="flex items-center space-x-2">
             <img
-              src={profile.connectWithSpotify  ? Logo : Logo2}
+              src={profile.connectWithSpotify ? Logo : Logo2}
               alt="Logo"
               className="w-[30px]"
             />
@@ -99,7 +103,7 @@ export const PrivateNavbar = () => {
                   : "text-orange-600"
               }`}
             >
-              {profile.connectWithSpotify  ? "ONLINE" : "OFFLINE"}
+              {profile.connectWithSpotify ? "ONLINE" : "OFFLINE"}
             </span>
           </div>
 
@@ -226,12 +230,12 @@ export const PrivateNavbar = () => {
                   }`}
                   href={item.link}
                   onClick={() => {
-                      if (item.action) {
-                        item.action();
-                      } else {
-                        navigate(item.link, { replace: true });
-                      }
-                    }}
+                    if (item.action) {
+                      item.action();
+                    } else {
+                      navigate(item.link, { replace: true });
+                    }
+                  }}
                 >
                   {item.title}
                 </button>
