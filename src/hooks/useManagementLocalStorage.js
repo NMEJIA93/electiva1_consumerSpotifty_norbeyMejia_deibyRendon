@@ -9,5 +9,9 @@ export const useManagementLocalStorage = () => {
         localStorage.removeItem('theme');
     }
 
-    return { clearLocalStorage };
+    const setLocalStorage = (key, value) => {
+        localStorage.setItem(key, value);
+    }
+
+    return { clearLocalStorage,setLocalStorage };
 }

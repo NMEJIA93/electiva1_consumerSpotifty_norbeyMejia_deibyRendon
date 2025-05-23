@@ -1,14 +1,14 @@
 import { useNavigate } from 'react-router-dom';
-import { fetchUserProfile, redirectToSpotifyLogin, exchangeCodeForToken } from '../../api/spotifyConsumer/auth/spotifyAuth'
+import { redirectToSpotifyLogin  } from '../../api/spotifyConsumer/auth/spotifyAuth'
 import { authTypes } from '../types/authTypes'
 import { signInWithGoogle, signInWithFacebook } from '../services/authService'
 import { useProfile } from '../../spotifyConsumer/hooks/useProfile'
 import { useManagementLocalStorage } from '../../hooks/useManagementLocalStorage'
 
 export const useAuthenticate = (dispatch) => {
-  const { clearLocalStorage } = useManagementLocalStorage();
+  const { clearLocalStorage, setLocalStorage } = useManagementLocalStorage();
   const navigate = useNavigate();
-  const { syncUserStateWithLocalStorage, setProfile } = useProfile(dispatch);
+  const { setProfile } = useProfile(dispatch);
 
 
   const onCancel = () => {
@@ -18,11 +18,10 @@ export const useAuthenticate = (dispatch) => {
   const onLoginUser = () => {
     navigate('/', { replace: true });
   };
-
+ 
   const handleGoogleCallback = async (setError) => {
     try {
       const user = await signInWithGoogle();
-      //console.log('Usuario autenticado----------:', user);
 
       const userData = {
         country: user.country || 'CO',
@@ -38,11 +37,17 @@ export const useAuthenticate = (dispatch) => {
         ownPlaylists: user.ownPlaylists || [],
         followedPlaylists: user.followedPlaylists || [],
         connectWithSpotify: false,
+        artistsTop: [],
+        tracksTop: [],
+        favoriteGenres: [],
       }
+
       console.log('Objeto de usuario:', userData);
       login(userData);
-      localStorage.setItem('userlogin', JSON.stringify(userData));
-      localStorage.setItem('logged', true);
+      setLocalStorage('userlogin', JSON.stringify(userData));
+      setLocalStorage('logged', true);
+      //localStorage.setItem('userlogin', JSON.stringify(userData));
+      //localStorage.setItem('logged', true);
 
       setProfile(userData);
 
@@ -70,11 +75,20 @@ export const useAuthenticate = (dispatch) => {
         type: user.type || 'user',
         id: user.id || 'user',
         artistsFollowers: user.artists?.items || [],
+        ownPlaylists: user.ownPlaylists || [],
+        followedPlaylists: user.followedPlaylists || [],
+        connectWithSpotify: false,
+        artistsTop: [],
+        tracksTop: [],
+        favoriteGenres: [],
+
       }
       console.log('Objeto de usuario:', userData);
       login(userData);
-      localStorage.setItem('userlogin', JSON.stringify(userData));
-      localStorage.setItem('logged', true);
+      setLocalStorage('userlogin', JSON.stringify(userData));
+      setLocalStorage('logged', true);
+      //localStorage.setItem('userlogin', JSON.stringify(userData));
+      //localStorage.setItem('logged', true);
 
       setProfile(userData);
 
@@ -96,7 +110,7 @@ export const useAuthenticate = (dispatch) => {
       type: authTypes.login,
       payload: userData
     };
-    console.log('Login action:', action);
+    //console.log('Login action:', action);
     dispatch(action);
   };
 
@@ -112,7 +126,6 @@ export const useAuthenticate = (dispatch) => {
 
   // Logout
   const logoutWithSpotify = () => {
-    console.log('Logout action');
     clearLocalStorage();
 
     dispatch({ type: authTypes.logout });
