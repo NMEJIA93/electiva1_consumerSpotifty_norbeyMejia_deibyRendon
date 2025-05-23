@@ -234,62 +234,67 @@ export const BodyUserPage = ({ user, dataProfile, isDarkMode, dataPorfil }) => {
                   {user.artistsFollowers.map((artist) => (
                     <div
                       key={artist.id}
-                      className={`rounded-xl p-5 flex items-center gap-4 border ${
+                      className={`rounded-xl p-5 border ${
                         darkMode
                           ? "hover:bg-gray-700/50 border-gray-700"
                           : "hover:bg-gray-50 border-gray-200"
                       } transition-colors shadow-sm`}
                     >
-                      <img
-                        src={
-                          artist.images?.[1]?.url ||
-                          artist.images?.[0]?.url ||
-                          ""
-                        }
-                        alt={artist.name}
-                        className="w-16 h-16 rounded-full object-cover border-2 border-white shadow-md"
-                      />
-                      <div className="flex-1 min-w-0">
-                        <h3 className="font-bold text-lg truncate">
-                          {artist.name}
-                        </h3>
-                        <p
-                          className={`text-xs mt-1 truncate ${
-                            darkMode ? "text-gray-400" : "text-gray-600"
-                          }`}
-                        >
-                          {artist.genres.slice(0, 2).join(", ")}
-                        </p>
-                        <div className="flex flex-wrap items-center justify-between mt-3 gap-2">
-                          <span
-                            className={`text-xs whitespace-nowrap ${
+                      {/* Artist Image and Basic Info */}
+                      <div className="flex items-center gap-4 mb-4">
+                        <img
+                          src={
+                            artist.images?.[1]?.url ||
+                            artist.images?.[0]?.url ||
+                            ""
+                          }
+                          alt={artist.name}
+                          className="w-16 h-16 rounded-full object-cover border-2 border-white shadow-md flex-shrink-0"
+                        />
+                        <div className="flex-1 min-w-0">
+                          <h3 className="font-bold text-lg truncate">
+                            {artist.name}
+                          </h3>
+                          <p
+                            className={`text-xs mt-1 truncate ${
                               darkMode ? "text-gray-400" : "text-gray-600"
                             }`}
                           >
-                            {artist.followers.total.toLocaleString()} seguidores
-                          </span>
-                          <a
-                            href={artist.external_urls.spotify}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-green-600 hover:text-green-700 text-xs font-semibold flex items-center gap-1 whitespace-nowrap"
-                          >
-                            Ver
-                            <svg
-                              className="w-3 h-3"
-                              fill="none"
-                              stroke="currentColor"
-                              viewBox="0 0 24 24"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth="2"
-                                d="M14 5l7 7m0 0l-7 7m7-7H3"
-                              ></path>
-                            </svg>
-                          </a>
+                            {artist.genres.slice(0, 2).join(", ")}
+                          </p>
                         </div>
+                      </div>
+                      
+                      {/* Followers and Link - Now in separate row */}
+                      <div className="flex items-center justify-between">
+                        <span
+                          className={`text-xs ${
+                            darkMode ? "text-gray-400" : "text-gray-600"
+                          } truncate flex-1 mr-2`}
+                        >
+                          {artist.followers.total.toLocaleString()} seguidores
+                        </span>
+                        <a
+                          href={artist.external_urls.spotify}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-green-600 hover:text-green-700 text-xs font-semibold flex items-center gap-1 flex-shrink-0"
+                        >
+                          Ver
+                          <svg
+                            className="w-3 h-3"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth="2"
+                              d="M14 5l7 7m0 0l-7 7m7-7H3"
+                            ></path>
+                          </svg>
+                        </a>
                       </div>
                     </div>
                   ))}
@@ -334,6 +339,7 @@ export const BodyUserPage = ({ user, dataProfile, isDarkMode, dataPorfil }) => {
               )}
             </div>
             )}
+           
 
             {/* Spotify Stats Section */}
             {user.connectWithSpotify ? (
@@ -434,7 +440,7 @@ export const BodyUserPage = ({ user, dataProfile, isDarkMode, dataPorfil }) => {
                     </div>
                     <div className="flex flex-wrap gap-3 mt-3">
                       {user?.favoriteGenres
-                        ?.slice(0, 3)
+                        ?.slice(0, 4)
                         .map((genre, index) => (
                           <span
                             key={index}
@@ -495,7 +501,7 @@ export const BodyUserPage = ({ user, dataProfile, isDarkMode, dataPorfil }) => {
                       </h3>
                     </div>
                     <div className="space-y-3">
-                      {user?.artistsTop?.slice(0, 3).map(
+                      {user?.artistsTop?.slice(0, 4).map(
                         (artist, index) => (
                           <div key={index} className="flex items-center gap-3">
                             <img
@@ -573,7 +579,7 @@ export const BodyUserPage = ({ user, dataProfile, isDarkMode, dataPorfil }) => {
                     user?.tracksTop.length > 0 ? (
                       <ul className="space-y-4">
                         {user?.tracksTop
-                          .slice(0, 2)
+                          .slice(0, 3)
                           .map((tracksTop, index) => (
                             <li key={index} className="flex items-center gap-4">
                               <div
@@ -583,16 +589,17 @@ export const BodyUserPage = ({ user, dataProfile, isDarkMode, dataPorfil }) => {
                                     : "bg-white border-gray-200"
                                 } shadow-sm`}
                               >
-                                {tracksTop.cover && (
+                                {tracksTop.image && (
                                   <img
-                                    src={tracksTop.cover}
+                                    src={tracksTop.image}
                                     alt={tracksTop.name}
                                     className="w-full h-full object-cover"
                                   />
                                 )}
                               </div>
                               <div className="flex-1 min-w-0">
-                                <p className="font-medium truncate text-blue-500">
+                                <p className="font-medium truncate text-blue-500" href={tracksTop.link}>
+                                  
                                   {tracksTop.name}
                                 </p>
                                 <p
