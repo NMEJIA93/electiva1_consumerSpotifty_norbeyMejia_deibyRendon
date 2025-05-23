@@ -5,7 +5,7 @@ import { useAuthenticate } from '../hooks/useAuthenticate';
 import { authTypes } from '../types/authTypes';
 import { UserProfileContext } from '../../spotifyConsumer/contexts/UserProfileContext';
 import { AuthContext } from '../context/UserContext';
-
+import { useManagementLocalStorage } from '../../hooks/useManagementLocalStorage'
 
 const authInitialState = {
     logged: false,
@@ -15,9 +15,9 @@ const authInitialState = {
 
 export const UserProvider = ({ children }) => {
     const [userState, dispatch] = useReducer(authReducer, authInitialState);
-    const { login, logout, loginWithSpotify, logoutWithSpotify, handleGoogleCallback,onLoginWithFacebook } = useAuthenticate(dispatch);
+    const { login, logout, loginWithSpotify, logoutWithSpotify, handleGoogleCallback, onLoginWithFacebook } = useAuthenticate(dispatch);
     const [isLoading, setIsLoading] = useState(true);
-
+    const { clearLocalStorage } = useManagementLocalStorage();
 
     const initializeUserState = async () => {
         const storedUser = localStorage.getItem('userlogin');
@@ -39,11 +39,17 @@ export const UserProvider = ({ children }) => {
         }
     };
 
-
+/*
     const clearLocalStorage = () => {
+        localStorage.removeItem('spotifyAccessToken');
+        localStorage.removeItem('spotifyCodeVerifier');
+        localStorage.removeItem('spotifyRefreshToken');
+        localStorage.removeItem('spotifyTokenExpiration');
         localStorage.removeItem('userlogin');
         localStorage.removeItem('logged');
+        localStorage.removeItem('theme');
     };
+*/
 
     useEffect(() => {
         const syncState = async () => {
@@ -74,12 +80,13 @@ export const UserProvider = ({ children }) => {
 
     return (
         <UserContext.Provider
-            value={{ userState, login, logout, loginWithSpotify, logoutWithSpotify,handleGoogleCallback,onLoginWithFacebook }}
+            value={{ userState, login, logout, loginWithSpotify, logoutWithSpotify, handleGoogleCallback, onLoginWithFacebook }}
         >
             {children}
         </UserContext.Provider>
     );
 };
+
 
 
 export const AuthProvider = ({ children }) => {

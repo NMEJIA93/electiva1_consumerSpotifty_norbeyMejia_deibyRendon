@@ -8,6 +8,8 @@ export const SPOTIFY_SCOPES = [
     'playlist-read-private',
     'playlist-read-collaborative',
     'user-follow-read',
+    'user-top-read',
     'playlist-modify-private',
+    'user-read-recently-played',
   ].join(' ');
 
