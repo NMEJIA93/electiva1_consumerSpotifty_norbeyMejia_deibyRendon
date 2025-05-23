@@ -15,8 +15,8 @@ export const UserPage = () => {
     const { profileState } = useContext(UserProfileContext);
     const { profile, errorMessage: error } = profileState;
     const { isDarkMode } = useTheme();
-    console.log('Estado global del perfil:', profileState);
-    console.log('Perfil del usuario:', dataPorfil);
+    //console.log('Estado global del perfil:', profileState);
+    //console.log('Perfil del usuario:', dataPorfil);
 
 
 
@@ -47,7 +47,7 @@ export const UserPage = () => {
             <div className="min-h-screen flex flex-col items-center justify-center bg-spotify-black text-white">
                 <div className="flex flex-col items-center">
                     {/* Spinner animado */}
-                    <div className="w-12 h-12 border-4 border-spotify-green border-t-transparent rounded-full animate-spin"></div>
+                    <div className="w-12 h-12 border-4 border-red-600 border-t-transparent rounded-full animate-spin"></div>
                     {/* Texto de carga */}
                     <p className="text-lg mt-4 text-spotify-gray">Cargando datos del usuario...</p>
                 </div>
@@ -64,6 +64,12 @@ export const UserPage = () => {
         profileLink: profile.profileLink || 'https://www.spotify.com',
         artistsFollowers: profile.artistsFollowers || [],
         country: profile.country || 'No disponible',
+        ownPlaylists: profile.ownPlaylists || [],
+        followedPlaylists: profile.followedPlaylists || [],
+        connectWithSpotify: profile.connectWithSpotify || false,
+        favoriteGenres: profile.favoriteGenres || [],
+        artistsTop: profile.artistsTop || [],
+        tracksTop: profile.tracksTop || [],
     };
 
     return (

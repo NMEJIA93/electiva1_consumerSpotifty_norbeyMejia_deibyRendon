@@ -86,3 +86,50 @@ export const getSpotifyArtistsFollowers = async (accessToken) => {
     throw error;
   }
 }
+
+export const getSpotifyPlaylistsUser = async (accessToken) => {
+  try {
+    const response = await axios.get('https://api.spotify.com/v1/me/playlists', {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      }
+    });
+
+    return response.data;
+
+  } catch (error) {
+    console.error('Error al obtener las listas de reproducción del usuario:', error.response?.data || error.message);
+    throw error;
+  }
+}
+
+export const getSpotifyArtistTopUser = async (accessToken) => {
+  try {
+    const response = await axios.get('https://api.spotify.com/v1/me/top/artists', {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      }
+    });
+
+    return response.data;
+
+  } catch (error) {
+    console.error('Error al obtener los artistas más escuchados del usuario:', error.response?.data || error.message);
+    throw error;
+  }
+}
+export const getSpotifyTrackTopsUser = async (accessToken) => {
+  try {
+    const response = await axios.get('https://api.spotify.com/v1/me/player/recently-played', {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      }
+    });
+
+    return response.data;
+
+  } catch (error) {
+    console.error('Error al obtener las canciones más escuchadas del usuario:', error.response?.data || error.message);
+    throw error;
+  }
+}

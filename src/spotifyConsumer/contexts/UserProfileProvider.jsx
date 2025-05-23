@@ -6,7 +6,6 @@ import { useProfile } from '../hooks/useProfile'
 
 const initialProfileState = {
     profile: null,
-    playlists: [],
     error: null,
 };
 
@@ -15,7 +14,7 @@ export const UserProfileProvider = ({ children }) => {
     const { getSpotifyProfile, setProfile, syncUserStateWithLocalStorage } = useProfile(dispatch);
     //const [isLoading, setIsLoading] = useState(true)
 
-    const allowedRoutes = ['/userpage'];
+    const allowedRoutes = ['/userpage','/home'];
 
     useEffect(() => {
         if (allowedRoutes.includes(location.pathname)) {
