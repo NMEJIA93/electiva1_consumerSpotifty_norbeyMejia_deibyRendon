@@ -19,8 +19,10 @@ export const SpotifyCallback = () => {
     try {
       const authorizationCode = extractAuthorizationCode();
       if (!authorizationCode) {
+        console.log('----error al traer code ------')
         throw new Error('No se recibió un código de autorización.');
       }
+      console.log('************entro en callback**********')
 
       const tokenData = await fetchTokenData(authorizationCode);
       await fetchAndSaveUserProfile(tokenData);
@@ -55,6 +57,7 @@ export const SpotifyCallback = () => {
   };
 
   const saveUserProfileToLocalStorage = (userProfile) => {
+    
     setLocalStorage('userlogin', JSON.stringify(userProfile));
     setLocalStorage('logged', true);
   };

@@ -16,6 +16,35 @@ const PrivateRoute = ({ children }) => {
 };
 
 export const AppRouter = () => {
+    const { userState: { logged } } = useContext(UserContext);
+
+    return (
+        <Routes>
+            {/* RUTA CALLBACK SIEMPRE DISPONIBLE */}
+            <Route path="/callback" element={<SpotifyCallback />} />
+
+            {!logged ? (
+                <>
+                    <Route path="/" element={<LoginPage />} />
+                    <Route path="/login" element={<LoginPage />} />
+                    <Route path="/register" element={<RegisterPage />} />
+                    <Route path="/*" element={<Navigate to="/login" />} />
+                </>
+            ) : (
+                <>
+                    <Route path="/userpage" element={<UserPage />} />
+                    <Route path="/register" element={<RegisterPage />} />
+                    <Route path="/userpagelogin" element={<PrivateRoute><UserPage /></PrivateRoute>} />
+                    <Route path="/home" element={<HomePage />} />
+                    <Route path="/*" element={<Navigate to="/userpage" />} />
+                </>
+            )}
+        </Routes>
+    );
+};
+
+{/* 
+export const AppRouter = () => {
 
     const { userState: { logged } } = useContext(UserContext)
 
@@ -46,3 +75,5 @@ export const AppRouter = () => {
         </>
     );
 }
+
+*/}

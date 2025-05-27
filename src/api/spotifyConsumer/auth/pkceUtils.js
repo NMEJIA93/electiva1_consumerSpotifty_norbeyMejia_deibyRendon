@@ -5,6 +5,7 @@ export const generateCodeVerifier = () => {
   };
   
   export const generateCodeChallenge = async (codeVerifier) => {
+    console.log('Codigo spotify--------------->',codeVerifier)
     const encoder = new TextEncoder();
     const data = encoder.encode(codeVerifier);
     const digest = await window.crypto.subtle.digest('SHA-256', data);

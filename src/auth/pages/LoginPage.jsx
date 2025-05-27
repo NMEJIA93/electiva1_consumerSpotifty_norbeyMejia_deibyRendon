@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useAuthActions } from '../hooks/useAuthActions';
-import bgBackground from '../../assets/bgBlackColor.png';
+//import bgBackground from '../../assets/bgBlackColor.png';
 import { useContext } from 'react';
 import { UserContext } from '../context/UserContext';
 import { useTheme } from '../../hooks/useTheme';

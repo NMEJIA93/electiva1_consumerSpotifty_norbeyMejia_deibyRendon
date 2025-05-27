@@ -1,23 +1,20 @@
-import { useEffect, useState, useContext } from 'react';
+import { useContext } from 'react';
 
 import { PrivateNavbar } from '../components/PrivateNavbar'
 import { BodyUserPage } from '../components/BodyUserPage'
 import { userMock, ownPlaylists, sharedPlaylists, dataPorfil } from '../../mocks/mocks'
 import { useTheme } from '../../hooks/useTheme';
 import { UserProfileContext } from '../contexts/UserProfileContext'
-
+import { UserContext } from '../../auth/context/UserContext'
 export const UserPage = () => {
-    //const { userState } = useContext(UserContext);
-    //console.log('Estado global del usuario:', userState);
-    //const { user, errorMessage: error } = userState;
 
 
     const { profileState } = useContext(UserProfileContext);
     const { profile, errorMessage: error } = profileState;
     const { isDarkMode } = useTheme();
-    //console.log('Estado global del perfil:', profileState);
-    //console.log('Perfil del usuario:', dataPorfil);
 
+
+    const { loginWithSpotify } = useContext(UserContext);
 
 
     if (error) {
@@ -77,12 +74,13 @@ export const UserPage = () => {
             <div className={`fixed top-0 left-0 right-0 z-50 ${isDarkMode ? 'bg-gray-900' : 'bg-white'} border-b ${isDarkMode ? 'border-gray-700' : 'border-gray-200'}`}>
                 <PrivateNavbar />
             </div>
-           <div className={`pt-16 min-h-screen ${isDarkMode ? 'bg-gray-900' : 'bg-white'}`}>
+            <div className={`pt-16 min-h-screen ${isDarkMode ? 'bg-gray-900' : 'bg-white'}`}>
                 <BodyUserPage
                     user={transformedUser}
                     ownPlaylists={ownPlaylists}
                     sharedPlaylists={sharedPlaylists}
                     dataPorfil={dataPorfil}
+                    loginWithSpotify={loginWithSpotify}
                 />
             </div>
         </>
