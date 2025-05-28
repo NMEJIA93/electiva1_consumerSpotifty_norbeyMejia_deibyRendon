@@ -31,7 +31,7 @@ export const UserProfileProvider = ({ children }) => {
 
     return (
         <UserProfileContext.Provider
-            value={{ profileState, getSpotifyProfile, setProfile,saveProfileFirebase }}>
+            value={{ profileState, getSpotifyProfile, setProfile,saveProfileFirebase ,dispatch}}>
             {children}
         </UserProfileContext.Provider>
     );

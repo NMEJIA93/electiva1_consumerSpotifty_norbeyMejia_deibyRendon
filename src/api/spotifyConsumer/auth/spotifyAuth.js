@@ -134,3 +134,52 @@ export const getSpotifyTrackTopsUser = async (accessToken) => {
     throw error;
   }
 }
+
+export const getTracks = async (accessToken, href) => {
+  try {
+    const response = await axios.get(href, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      }
+    });
+    
+    return response.data;
+
+  } catch (error) {
+    console.error('Error al obtener las canciones de la playlist:', error.response?.data || error.message);
+    throw error;
+  }
+}
+
+export const unfollowPlalist = async (accessToken, playlistId) => {
+  try {
+    const response = await axios.delete(`https://api.spotify.com/v1/playlists/${playlistId}/followers`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      }
+    });
+
+    return response.data;
+
+  } catch (error) {
+    console.error('Error al dejar de seguir la playlist:', error.response?.data || error.message);
+    throw error;
+  }
+}
+
+export const followPlaylist = async (accessToken, playlistId) => {
+  try {
+    const response = await axios.put(`https://api.spotify.com/v1/playlists/${playlistId}/followers`, null, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
+      },
+    });
+
+    return response.data;
+
+  } catch (error) {
+    console.error('Error al seguir la playlist:', error.response?.data || error.message);
+    throw error;
+  }
+}

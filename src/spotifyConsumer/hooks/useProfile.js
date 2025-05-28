@@ -3,7 +3,10 @@ import {
   getSpotifyArtistsFollowers,
   getSpotifyPlaylistsUser,
   getSpotifyArtistTopUser,
-  getSpotifyTrackTopsUser
+  getSpotifyTrackTopsUser,
+  getTracks,
+  unfollowPlalist,
+  followPlaylist
 } from '../../api/spotifyConsumer/auth/spotifyAuth'
 
 import { doc, setDoc, collection, addDoc } from "firebase/firestore/lite";
@@ -108,6 +111,9 @@ export const useProfile = (dispatch) => {
         payload: user,
       });
 
+      localStorage.setItem('userlogin', JSON.stringify(user));
+      localStorage.setItem('logged', 'true');
+
       console.log('Perfil de usuario después de la actualización:', user);
       return user;
 
@@ -211,6 +217,29 @@ export const useProfile = (dispatch) => {
     }
   }
 
+   const setSpotifyTracksPlaylist = async (accessToken, href) => {
+    try{
+      const tracks = await getTracks(accessToken, href);
+
+      const trackPlylist = tracks.items.map(item => ({
+        title: item.track.name,
+        artist: item.track.artists.map(artist => artist.name).join(', '),
+        album: item.track.album.name,
+        duration: msToMinutesAndSeconds(item.track.duration_ms),
+    }));
+    console.log("trackPlylist", trackPlylist)
+      return trackPlylist;
+
+    } catch (error) { 
+      console.error('Error al obtener las canciones de la playlist:', error);
+      dispatch({
+        type: actionTypes.SET_ERROR,
+        payload: 'Error al obtener las canciones de la playlist.',
+      });
+      throw error;
+    }
+  }
+
   const setProfile = (profile) => {
     console.log("log desde ser profile ----------------", profile)
     dispatch({
@@ -251,11 +280,42 @@ export const useProfile = (dispatch) => {
     return accessToken;
   };
 
-
-
-
-  return { getSpotifyProfile, setProfile, syncUserStateWithLocalStorage, saveProfileFirebase };
+  const unfollowPlaylistAndRefresh = async (playlistId) => {
+  try {
+    const accessToken = validateAccessToken();
+    await unfollowPlalist(accessToken, playlistId);
+    await getSpotifyProfile();; // Esto actualizará el contexto global y las playlists
+  } catch (error) {
+    console.error('Error al dejar de seguir y refrescar el perfil:', error);
+    dispatch({
+      type: actionTypes.SET_ERROR,
+      payload: 'Error al dejar de seguir la playlist.',
+    });
+    throw error;
+  }
 };
+
+const followPlaylistAndRefresh = async (playlistId) => {
+  try {
+    const accessToken = validateAccessToken();
+    await followPlaylist(accessToken, playlistId);
+    await getSpotifyProfile(); // Esto actualizará el contexto global y las playlists
+  } catch (error) {
+    console.error('Error al seguir la playlist y refrescar el perfil:', error);
+    dispatch({
+      type: actionTypes.SET_ERROR,
+      payload: 'Error al seguir la playlist.',
+    });
+    throw error;
+  }
+};
+
+
+
+  return { getSpotifyProfile, setProfile, syncUserStateWithLocalStorage, saveProfileFirebase , unfollowPlaylistAndRefresh , followPlaylistAndRefresh };
+
+};
+
 
 const msToMinutesAndSeconds = (ms) => {
   const totalSeconds = Math.floor(ms / 1000);
