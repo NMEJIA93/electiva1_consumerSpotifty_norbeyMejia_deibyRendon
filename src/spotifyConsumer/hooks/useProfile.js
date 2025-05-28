@@ -6,12 +6,45 @@ import {
   getSpotifyTrackTopsUser
 } from '../../api/spotifyConsumer/auth/spotifyAuth'
 
-import {useManagementLocalStorage} from '../../hooks/useManagementLocalStorage'
-
+import { doc, setDoc, collection, addDoc } from "firebase/firestore/lite";
+import { FirebaseDb } from '../../firebase/firebaseConfig'
+import { useManagementLocalStorage } from '../../hooks/useManagementLocalStorage'
 import { actionTypes } from '../types/actionsTypes'
+import { structUserProfile } from '../../utils/structUserProfile'
 
 export const useProfile = (dispatch) => {
   const { clearLocalStorage } = useManagementLocalStorage();
+
+  const saveProfileFirebase = async (profile) => {
+    try {
+      const profileId = profile.uid || profile.id;
+      if (!profileId) {
+        throw new Error('El perfil no tiene un uid válido.');
+      }
+      /*
+      const colRef = collection(FirebaseDb, 'profiles', profileId, 'profile');
+      const docRef = await addDoc(colRef, profile);
+  
+      await setDoc(docRef, { ...profile, id: profileId }, { merge: true });
+  */
+      const docRef = doc(FirebaseDb, 'profiles', profileId);
+      await setDoc(docRef, { ...profile, id: profileId }, { merge: true });
+
+      dispatch({
+        type: actionTypes.SAVE_PROFILE,
+        payload: { ...profile, id: profileId },
+      });
+      console.log('***********Guardando perfil en Firebase:******************\n', profileId);
+      console.log('***********documento:******************\n', docRef);
+
+    } catch (error) {
+      console.log('***********Error al guardar el perfil en Firebase:******************\n', error);
+      dispatch({
+        type: actionTypes.SET_ERROR,
+        payload: 'Error al guardar el perfil en Firebase.',
+      });
+    }
+  }
 
   const getSpotifyProfile = async () => {
     try {
@@ -22,7 +55,7 @@ export const useProfile = (dispatch) => {
       const artistsTop = await setSpotifyArtistTopUser(accessToken);
       const tracksTop = await setSpotifyTrackTopsUser(accessToken);
       const favoriteGenres = getFavoriteGenres(artistsTop);
-      
+
 
       const user = {
         country: userProfile.country,
@@ -34,6 +67,7 @@ export const useProfile = (dispatch) => {
         profileLink: userProfile.external_urls?.spotify || '',
         type: userProfile.type || 'user',
         id: userProfile.id || 'user',
+        uid: userProfile.uid,
         artistsFollowers: artistsFollowers || [],
         ownPlaylists: ownPlaylists || [],
         followedPlaylists: followedPlaylists || [],
@@ -80,7 +114,7 @@ export const useProfile = (dispatch) => {
       const playlists = await getSpotifyPlaylistsUser(accessToken);
       const ownPlaylists = playlists.items.filter(playlist => playlist.owner.id === UserId);
       const followedPlaylists = playlists.items.filter(playlist => playlist.owner.id !== UserId);
-      
+
       return { ownPlaylists, followedPlaylists };
 
     } catch (error) {
@@ -189,7 +223,8 @@ export const useProfile = (dispatch) => {
 
 
 
-  return { getSpotifyProfile, setProfile, syncUserStateWithLocalStorage };
+
+  return { getSpotifyProfile, setProfile, syncUserStateWithLocalStorage, saveProfileFirebase };
 };
 
 const msToMinutesAndSeconds = (ms) => {
