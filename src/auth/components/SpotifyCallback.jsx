@@ -9,7 +9,7 @@ export const SpotifyCallback = () => {
   const navigate = useNavigate();
   const [error, setError] = useState(null);
 
-  const { getSpotifyProfile } = useContext(UserProfileContext);
+  const { getSpotifyProfile, saveProfileFirebase } = useContext(UserProfileContext);
   const { login } = useContext(UserContext);
 
   const { setLocalStorage } = useManagementLocalStorage();
@@ -19,8 +19,10 @@ export const SpotifyCallback = () => {
     try {
       const authorizationCode = extractAuthorizationCode();
       if (!authorizationCode) {
+        console.log('----error al traer code ------')
         throw new Error('No se recibió un código de autorización.');
       }
+      console.log('************entro en callback**********')
 
       const tokenData = await fetchTokenData(authorizationCode);
       await fetchAndSaveUserProfile(tokenData);
@@ -51,10 +53,15 @@ export const SpotifyCallback = () => {
   const fetchAndSaveUserProfile = async (token) => {
     const userProfile = await getSpotifyProfile();
     saveUserProfileToLocalStorage(userProfile);
+
+    const userId = userProfile.uid || userProfile.id;
+    const profileToSave = { ...userProfile, uid: userId };
+    saveProfileFirebase(profileToSave);
     login(userProfile);
   };
 
   const saveUserProfileToLocalStorage = (userProfile) => {
+
     setLocalStorage('userlogin', JSON.stringify(userProfile));
     setLocalStorage('logged', true);
   };

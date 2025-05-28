@@ -8,7 +8,7 @@ import { useManagementLocalStorage } from '../../hooks/useManagementLocalStorage
 export const useAuthenticate = (dispatch) => {
   const { clearLocalStorage, setLocalStorage } = useManagementLocalStorage();
   const navigate = useNavigate();
-  const { setProfile } = useProfile(dispatch);
+  const { setProfile,saveProfileFirebase } = useProfile(dispatch);
 
 
   const onCancel = () => {
@@ -24,6 +24,7 @@ export const useAuthenticate = (dispatch) => {
       const user = await signInWithGoogle();
 
       const userData = {
+        uid: user.uid,
         country: user.country || 'CO',
         email: user.email,
         firstName: user.displayName || 'Name',
@@ -48,6 +49,7 @@ export const useAuthenticate = (dispatch) => {
       setLocalStorage('logged', true);
       //localStorage.setItem('userlogin', JSON.stringify(userData));
       //localStorage.setItem('logged', true);
+      await saveProfileFirebase(userData);
 
       setProfile(userData);
 

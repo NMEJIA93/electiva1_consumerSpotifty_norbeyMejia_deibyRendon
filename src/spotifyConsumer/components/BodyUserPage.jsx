@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useTheme } from "../../hooks/useTheme";
 
-export const BodyUserPage = ({ user, dataProfile, isDarkMode, dataPorfil }) => {
+export const BodyUserPage = ({ user, dataProfile, isDarkMode, dataPorfil,loginWithSpotify }) => {
   const { isDarkMode: themeDarkMode } = useTheme();
   const darkMode = isDarkMode ?? themeDarkMode;
 
@@ -657,7 +657,9 @@ export const BodyUserPage = ({ user, dataProfile, isDarkMode, dataPorfil }) => {
                     Desbloquea estadísticas personalizadas, recomendaciones
                     exclusivas y descubre nuevos insights sobre tu música.
                   </p>
-                  <button className="px-10 py-4 bg-green-600 hover:bg-green-700 text-white rounded-full font-semibold transition-all flex items-center justify-center mx-auto gap-3 shadow-lg">
+                  <button className="px-10 py-4 bg-green-600 hover:bg-green-700 text-white rounded-full font-semibold transition-all flex items-center justify-center mx-auto gap-3 shadow-lg"
+                  onClick={loginWithSpotify}
+                  >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       className="h-6 w-6"

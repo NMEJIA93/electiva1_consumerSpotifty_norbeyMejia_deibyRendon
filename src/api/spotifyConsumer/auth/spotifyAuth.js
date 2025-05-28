@@ -12,6 +12,7 @@ export const redirectToSpotifyLogin = async () => {
   const codeVerifier = generateCodeVerifier();
 
   localStorage.setItem('spotifyCodeVerifier', codeVerifier);
+  console.log('Codigo spotify--------------->', codeVerifier);
   const codeChallenge = await generateCodeChallenge(codeVerifier);
 
   const authUrl = `${SPOTIFY_AUTH_ENDPOINT}?client_id=${SPOTIFY_CLIENT_ID}&response_type=code&redirect_uri=${encodeURIComponent(

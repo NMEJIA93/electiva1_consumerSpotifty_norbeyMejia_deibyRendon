@@ -16,32 +16,30 @@ const PrivateRoute = ({ children }) => {
 };
 
 export const AppRouter = () => {
-  const {
-    userState: { logged },
-  } = useContext(UserContext);
+    const { userState: { logged } } = useContext(UserContext);
 
-  if (!logged) {
     return (
-      <>
         <Routes>
-          <Route path="/" element={<LoginPage />} />
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/register" element={<RegisterPage />} />
-          <Route path="/callback" element={<SpotifyCallback />} />
-          <Route path="/*" element={<Navigate to="/login" />} />
-        </Routes>
-      </>
-    );
-  }
+            {/* RUTA CALLBACK SIEMPRE DISPONIBLE */}
+            <Route path="/callback" element={<SpotifyCallback />} />
 
-  return (
-    <>
-      <Routes>
-        <Route path="/userpage" element={<UserPage />} />
-        <Route path="/register" element={<RegisterPage />} />
-        <Route path="/home" element={<HomePage />} />
-        <Route path="/*" element={<Navigate to="/login" />} />
-      </Routes>
-    </>
-  );
+            {!logged ? (
+                <>
+                    <Route path="/" element={<LoginPage />} />
+                    <Route path="/login" element={<LoginPage />} />
+                    <Route path="/register" element={<RegisterPage />} />
+                    <Route path="/*" element={<Navigate to="/login" />} />
+                </>
+            ) : (
+                <>
+                    <Route path="/userpage" element={<UserPage />} />
+                    <Route path="/register" element={<RegisterPage />} />
+                    <Route path="/userpagelogin" element={<PrivateRoute><UserPage /></PrivateRoute>} />
+                    <Route path="/home" element={<HomePage />} />
+                    <Route path="/*" element={<Navigate to="/userpage" />} />
+                </>
+            )}
+        </Routes>
+    );
 };
+

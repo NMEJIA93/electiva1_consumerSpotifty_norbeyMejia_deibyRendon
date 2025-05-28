@@ -1,7 +1,8 @@
-import { useReducer, useState, useEffect } from 'react';
+import { useReducer, useState, useEffect, useContext } from 'react';
 import { userProfileReducer } from '../reducers/spotifyReducer'
 import { UserProfileContext } from '../contexts/UserProfileContext'
 import { useProfile } from '../hooks/useProfile'
+import {UserContext} from '../../auth/context/UserContext'
 
 
 const initialProfileState = {
@@ -9,9 +10,15 @@ const initialProfileState = {
     error: null,
 };
 
+const init = () =>{
+    return initialProfileState;
+}
+
 export const UserProfileProvider = ({ children }) => {
-    const [profileState, dispatch] = useReducer(userProfileReducer, initialProfileState);
-    const { getSpotifyProfile, setProfile, syncUserStateWithLocalStorage } = useProfile(dispatch);
+    const [profileState, dispatch] = useReducer(userProfileReducer, initialProfileState,init);
+    
+    const {userState: user}  = useContext(UserContext)
+    const { getSpotifyProfile, setProfile, syncUserStateWithLocalStorage, saveProfileFirebase } = useProfile(dispatch);
     //const [isLoading, setIsLoading] = useState(true)
 
     const allowedRoutes = ['/userpage','/home'];
@@ -19,13 +26,12 @@ export const UserProfileProvider = ({ children }) => {
     useEffect(() => {
         if (allowedRoutes.includes(location.pathname)) {
              syncUserStateWithLocalStorage();
-            //setIsLoading(false);
         }
     }, [location.pathname]); 
 
     return (
         <UserProfileContext.Provider
-            value={{ profileState, getSpotifyProfile, setProfile, dispatch }}>
+            value={{ profileState, getSpotifyProfile, setProfile,saveProfileFirebase ,dispatch}}>
             {children}
         </UserProfileContext.Provider>
     );
