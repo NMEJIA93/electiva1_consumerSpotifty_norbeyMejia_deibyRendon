@@ -3,7 +3,8 @@ import {
   getSpotifyArtistsFollowers,
   getSpotifyPlaylistsUser,
   getSpotifyArtistTopUser,
-  getSpotifyTrackTopsUser
+  getSpotifyTrackTopsUser,
+  getTracks
 } from '../../api/spotifyConsumer/auth/spotifyAuth'
 
 import {useManagementLocalStorage} from '../../hooks/useManagementLocalStorage'
@@ -147,6 +148,29 @@ export const useProfile = (dispatch) => {
     }
   }
 
+   const setSpotifyTracksPlaylist = async (accessToken, href) => {
+    try{
+      const tracks = await getTracks(accessToken, href);
+
+      const trackPlylist = tracks.items.map(item => ({
+        title: item.track.name,
+        artist: item.track.artists.map(artist => artist.name).join(', '),
+        album: item.track.album.name,
+        duration: msToMinutesAndSeconds(item.track.duration_ms),
+    }));
+    console.log("trackPlylist", trackPlylist)
+      return trackPlylist;
+
+    } catch (error) { 
+      console.error('Error al obtener las canciones de la playlist:', error);
+      dispatch({
+        type: actionTypes.SET_ERROR,
+        payload: 'Error al obtener las canciones de la playlist.',
+      });
+      throw error;
+    }
+  }
+
   const setProfile = (profile) => {
     console.log("log desde ser profile ----------------", profile)
     dispatch({
@@ -189,7 +213,7 @@ export const useProfile = (dispatch) => {
 
 
 
-  return { getSpotifyProfile, setProfile, syncUserStateWithLocalStorage };
+  return { getSpotifyProfile, setProfile, syncUserStateWithLocalStorage, setSpotifyTracksPlaylist };
 };
 
 const msToMinutesAndSeconds = (ms) => {

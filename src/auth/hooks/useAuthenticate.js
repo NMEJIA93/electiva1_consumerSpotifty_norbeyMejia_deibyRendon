@@ -110,7 +110,7 @@ export const useAuthenticate = (dispatch) => {
       type: authTypes.login,
       payload: userData
     };
-    //console.log('Login action:', action);
+    console.log('Login action:', action);
     dispatch(action);
   };
 
@@ -145,6 +145,43 @@ export const useAuthenticate = (dispatch) => {
     }
   };
 
+  const registerWithApp = (user)=>{
+
+    try {
+      const useRegister = user || {}; 
+      console.log('Registering user with app:', user);
+      const userData = {
+        country: user.country || 'CO',
+        email: user.email,
+        firstName: user.firstName || 'Name',
+        profilePicture: user.profilePicture || '',
+        followers: user.followers || 0,
+        subscription: user.subscription || 'free',
+        profileLink: user.profileLink || '',
+        type: user.type || 'user',
+        id: user.id || 'user',
+        artistsFollowers: user.artistsFollowers || [],
+        ownPlaylists: user.ownPlaylists || [],
+        followedPlaylists: user.followedPlaylists || [],
+        connectWithSpotify: false,
+        artistsTop: [],
+        tracksTop: [],
+        favoriteGenres: [],
+      }
+      console.log('usuario a guardar:', userData);
+      setLocalStorage('userRegister', JSON.stringify(userData));
+      setLocalStorage('logged', false);
+      navigate('/login');
+  }catch (error) {
+      console.error('Error al registrar el usuario con la aplicación:', error);
+      dispatch({
+        type: authTypes.errors,
+        payload: { errorMessage: 'Error al registrar el usuario con la aplicación.' },
+      });
+      throw error;
+    }
+  }
+
 
 
 
@@ -158,5 +195,6 @@ export const useAuthenticate = (dispatch) => {
     handleGoogleCallback,
     onLoginWithFacebook,
     onNavigateToRegister,
+    registerWithApp,
   };
 };

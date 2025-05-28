@@ -9,7 +9,7 @@ import { useForm } from '../../hooks/useForm';
 
 
 export const LoginPage = () => {
-    const { loginWithSpotify, handleGoogleCallback, onLoginWithFacebook} = useContext(UserContext);
+    const { loginWithSpotify, handleGoogleCallback, onLoginWithFacebook,registerWithApp} = useContext(UserContext);
     const [email1, setEmail] = useState('');
     const [password1, setPassword] = useState('');
     const {
@@ -47,6 +47,19 @@ export const LoginPage = () => {
         localStorage.setItem("theme", isDarkMode ? "dark" : "light");
         window.dispatchEvent(new Event("storage"));
       }, [isDarkMode]);
+
+    const register = (email, password) => {
+        if (!email || !password) {
+            alert("Por favor, completa todos los campos.");
+            return;
+        }
+        console.log("Registrando usuario:", email)
+        const user={
+            email: email, 
+            password: password
+        }
+        registerWithApp(user);
+    }  
 
     return (
         /*<div
@@ -356,10 +369,11 @@ export const LoginPage = () => {
                   </div>
                   <button
                     id="register-button"
-                    type="submit"
                     className="w-full bg-red-600 text-white py-2 rounded-lg hover:bg-red-700 transition"
+                    onClick={() => register(email, password)}
                   >
                     Registrarse
+                    
                   </button>
                 </form>
                 <div className="mt-6">

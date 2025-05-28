@@ -133,3 +133,19 @@ export const getSpotifyTrackTopsUser = async (accessToken) => {
     throw error;
   }
 }
+
+export const getTracks = async (accessToken, href) => {
+  try {
+    const response = await axios.get(href, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      }
+    });
+    
+    return response.data;
+
+  } catch (error) {
+    console.error('Error al obtener las canciones de la playlist:', error.response?.data || error.message);
+    throw error;
+  }
+}
