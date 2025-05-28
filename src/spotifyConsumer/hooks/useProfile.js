@@ -4,7 +4,9 @@ import {
   getSpotifyPlaylistsUser,
   getSpotifyArtistTopUser,
   getSpotifyTrackTopsUser,
-  getTracks
+  getTracks,
+  unfollowPlalist,
+  followPlaylist
 } from '../../api/spotifyConsumer/auth/spotifyAuth'
 
 import {useManagementLocalStorage} from '../../hooks/useManagementLocalStorage'
@@ -48,6 +50,9 @@ export const useProfile = (dispatch) => {
         type: actionTypes.SET_PROFILE,
         payload: user,
       });
+
+      localStorage.setItem('userlogin', JSON.stringify(user));
+      localStorage.setItem('logged', 'true');
 
       console.log('Perfil de usuario después de la actualización:', user);
       return user;
@@ -211,10 +216,39 @@ export const useProfile = (dispatch) => {
     return accessToken;
   };
 
-
-
-  return { getSpotifyProfile, setProfile, syncUserStateWithLocalStorage, setSpotifyTracksPlaylist };
+  const unfollowPlaylistAndRefresh = async (playlistId) => {
+  try {
+    const accessToken = validateAccessToken();
+    await unfollowPlalist(accessToken, playlistId);
+    await getSpotifyProfile();; // Esto actualizará el contexto global y las playlists
+  } catch (error) {
+    console.error('Error al dejar de seguir y refrescar el perfil:', error);
+    dispatch({
+      type: actionTypes.SET_ERROR,
+      payload: 'Error al dejar de seguir la playlist.',
+    });
+    throw error;
+  }
 };
+
+const followPlaylistAndRefresh = async (playlistId) => {
+  try {
+    const accessToken = validateAccessToken();
+    await followPlaylist(accessToken, playlistId);
+    await getSpotifyProfile(); // Esto actualizará el contexto global y las playlists
+  } catch (error) {
+    console.error('Error al seguir la playlist y refrescar el perfil:', error);
+    dispatch({
+      type: actionTypes.SET_ERROR,
+      payload: 'Error al seguir la playlist.',
+    });
+    throw error;
+  }
+};
+
+  return { getSpotifyProfile, setProfile, syncUserStateWithLocalStorage, setSpotifyTracksPlaylist , unfollowPlaylistAndRefresh , followPlaylistAndRefresh };
+};
+
 
 const msToMinutesAndSeconds = (ms) => {
   const totalSeconds = Math.floor(ms / 1000);

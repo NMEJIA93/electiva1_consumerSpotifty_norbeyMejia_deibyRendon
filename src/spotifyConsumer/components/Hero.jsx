@@ -10,7 +10,6 @@ import {
 } from "../../mocks/mocks";
 import imageMock from "../../assets/bgImage.png";
 import { useProfile } from "../hooks/useProfile";
-
 export const Hero = () => {
   const [search, setSearch] = useState("");
   const [selectedPlaylist, setSelectedPlaylist] = useState(null);
@@ -19,11 +18,10 @@ export const Hero = () => {
   const [showAllFollowedPlaylists, setShowAllFollowedPlaylists] =
     useState(false);
   const { isDarkMode } = useTheme();
-  const { profileState } = useContext(UserProfileContext);
+  const { profileState, dispatch } = useContext(UserProfileContext);
   const { profile, errorMessage: error } = profileState;
   const spotifyAccessToken = localStorage.getItem("spotifyAccessToken");
-  const { setSpotifyTracksPlaylist } = useProfile();
-  const { setProfile } = useProfile();
+  const { setSpotifyTracksPlaylist, unfollowPlaylistAndRefresh, setProfile, followPlaylistAndRefresh } = useProfile(dispatch);
 
   console.log("Estado global del perfil:", profileState);
   console.log("Perfil del usuario:", profile);
@@ -409,7 +407,7 @@ export const Hero = () => {
                           } transition-colors duration-300 shadow-lg`}
                           onClick={(e) => {
                             e.stopPropagation();
-                            // Lógica para dejar de seguir playlist
+                            unfollowPlaylistAndRefresh(playlist.id)
                           }}
                         >
                           <svg
@@ -522,6 +520,7 @@ export const Hero = () => {
                             onClick={(e) => {
                               e.stopPropagation();
                               // Lógica para añadir playlist
+                              followPlaylistAndRefresh(playlist.id)
                             }}
                           >
                             <span className="text-xl font-bold">+</span>

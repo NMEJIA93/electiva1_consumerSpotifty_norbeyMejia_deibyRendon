@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { redirectToSpotifyLogin  } from '../../api/spotifyConsumer/auth/spotifyAuth'
+import { redirectToSpotifyLogin } from '../../api/spotifyConsumer/auth/spotifyAuth'
 import { authTypes } from '../types/authTypes'
 import { signInWithGoogle, signInWithFacebook } from '../services/authService'
 import { useProfile } from '../../spotifyConsumer/hooks/useProfile'
@@ -18,7 +18,7 @@ export const useAuthenticate = (dispatch) => {
   const onLoginUser = () => {
     navigate('/', { replace: true });
   };
- 
+
   const handleGoogleCallback = async (setError) => {
     try {
       const user = await signInWithGoogle();
@@ -145,14 +145,15 @@ export const useAuthenticate = (dispatch) => {
     }
   };
 
-  const registerWithApp = (user)=>{
+  const registerWithApp = (user) => {
 
     try {
-      const useRegister = user || {}; 
+      const useRegister = user || {};
       console.log('Registering user with app:', user);
       const userData = {
         country: user.country || 'CO',
         email: user.email,
+        password: user.password || '',
         firstName: user.firstName || 'Name',
         profilePicture: user.profilePicture || '',
         followers: user.followers || 0,
@@ -172,13 +173,43 @@ export const useAuthenticate = (dispatch) => {
       setLocalStorage('userRegister', JSON.stringify(userData));
       setLocalStorage('logged', false);
       navigate('/login');
-  }catch (error) {
+    } catch (error) {
       console.error('Error al registrar el usuario con la aplicación:', error);
       dispatch({
         type: authTypes.errors,
         payload: { errorMessage: 'Error al registrar el usuario con la aplicación.' },
       });
       throw error;
+    }
+  }
+
+  const loginWithApp = (email, password) => {
+    console.log("informacion recibida", email, password);
+
+    const userVerfy = localStorage.getItem('userRegister');
+    console.log('Datos del usuario verificado:', userVerfy);
+
+    if (userVerfy) {
+      const userData = JSON.parse(userVerfy); // Parse first, then compare
+      if (userData.email === email && userData.password === password) {
+        console.log('Login con la aplicación:', userData);
+        login(userData);
+        setLocalStorage('userlogin', JSON.stringify(userData));
+        setLocalStorage('logged', true);
+        navigate('/userpage');
+      } else {
+        console.error('Error al iniciar sesión con la aplicación: Credenciales incorrectas');
+        dispatch({
+          type: authTypes.errors,
+          payload: { errorMessage: 'Credenciales incorrectas. Inténtalo de nuevo.' },
+        });
+      }
+    } else {
+      console.error('Error: No se encontraron datos de usuario registrado');
+      dispatch({
+        type: authTypes.errors,
+        payload: { errorMessage: 'No hay usuario registrado.' },
+      });
     }
   }
 
@@ -196,5 +227,6 @@ export const useAuthenticate = (dispatch) => {
     onLoginWithFacebook,
     onNavigateToRegister,
     registerWithApp,
+    loginWithApp,
   };
 };

@@ -6,10 +6,11 @@ import { UserContext } from '../context/UserContext';
 import { useTheme } from '../../hooks/useTheme';
 import Logo from '../../assets/Logo.png';
 import { useForm } from '../../hooks/useForm';
+import firebase from 'firebase/compat/app';
 
 
 export const LoginPage = () => {
-    const { loginWithSpotify, handleGoogleCallback, onLoginWithFacebook,registerWithApp} = useContext(UserContext);
+    const { loginWithSpotify, handleGoogleCallback, onLoginWithFacebook,registerWithApp, loginWithApp} = useContext(UserContext);
     const [email1, setEmail] = useState('');
     const [password1, setPassword] = useState('');
     const {
@@ -27,7 +28,7 @@ export const LoginPage = () => {
     const [confirmPassword, setConfirmPassword] = useState(""); 
     const [passwordsMatch, setPasswordsMatch] = useState(true);
 
-    const { email, password, onInputChange } = useForm()
+    const { email, password, firstName, onInputChange } = useForm()
     const { isDarkMode , toggleTheme} = useTheme();  
 
     const toggleLogin = () => setIsLoginOpen(!isLoginOpen);
@@ -48,7 +49,7 @@ export const LoginPage = () => {
         window.dispatchEvent(new Event("storage"));
       }, [isDarkMode]);
 
-    const register = (email, password) => {
+    const register = (email, password,firstName) => {
         if (!email || !password) {
             alert("Por favor, completa todos los campos.");
             return;
@@ -56,10 +57,19 @@ export const LoginPage = () => {
         console.log("Registrando usuario:", email)
         const user={
             email: email, 
-            password: password
+            password: password,
+            firstName: firstName
         }
         registerWithApp(user);
     }  
+    const login = (email, password) => {
+        if (!email || !password) {
+            alert("Por favor, completa todos los campos.");
+            return;
+        }
+        console.log("Iniciando sesión con la aplicación:", email)
+        loginWithApp(email, password);
+    }
 
     return (
         /*<div
@@ -215,7 +225,7 @@ export const LoginPage = () => {
                       alert("Todos los campos deben estar llenos");
                       return;
                     }
-    
+                    login(usuario, contraseña);
                     console.log("Formulario enviado con éxito");
                   }}
                 >
@@ -255,8 +265,8 @@ export const LoginPage = () => {
                     </div>
                   </div>
                   <button
+                  type='submit'
                     className="w-full bg-red-600 text-white py-2 rounded-lg hover:bg-red-700 transition"
-                    onClick={onLoginUser}
                   >
                     Iniciar Sesión
                   </button>
@@ -308,10 +318,25 @@ export const LoginPage = () => {
                   }}
                 >
                   <div className="mb-4">
-                    <label className={`block text-sm font-medium mb-1 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>Usuario</label>
+                    
+                    <label className={`block text-sm font-medium mb-1 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>Nombre</label>
+                    <input
+                      name="firstName"
+                      type="text"
+                      className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 ${
+                        isDarkMode 
+                          ? 'bg-gray-700 border-gray-600 text-white' 
+                          : 'bg-white border-gray-300 text-gray-800'
+                      }`}
+                      onChange={onInputChange}
+                    />
+                  </div>
+                  <div className="mb-4">
+                    
+                    <label className={`block text-sm font-medium mb-1 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>Correo</label>
                     <input
                       name="email"
-                      type="text"
+                      type="email"
                       className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 ${
                         isDarkMode 
                           ? 'bg-gray-700 border-gray-600 text-white' 
@@ -370,7 +395,7 @@ export const LoginPage = () => {
                   <button
                     id="register-button"
                     className="w-full bg-red-600 text-white py-2 rounded-lg hover:bg-red-700 transition"
-                    onClick={() => register(email, password)}
+                    onClick={() => register(email, password, firstName)}
                   >
                     Registrarse
                     

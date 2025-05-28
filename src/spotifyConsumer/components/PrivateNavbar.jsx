@@ -31,7 +31,7 @@ export const PrivateNavbar = () => {
   };
 
   const navbarProfilelinks = [
-    { id: 1, title: "Inicio", link: "/" },
+    { id: 1, title: "Inicio", link: "/home" },
     { id: 2, title: "Perfil", link: "/userpage" },
     { id: 5, title: "Cerrar Sesión", link: "/", action: () => logoutUser() },
   ];
