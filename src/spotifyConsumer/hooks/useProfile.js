@@ -46,6 +46,32 @@ export const useProfile = (dispatch) => {
     }
   }
 
+    const savePlaylistFirebase = async (playlist) => {
+    try {
+      const playlistId = playlist.uid || playlist.id;
+      if (!playlistId) {
+        throw new Error('PlayList no valida');
+      }
+
+      const docRef = doc(FirebaseDb, 'playlist', playlistId);
+      await setDoc(docRef, { ...playlist, id: playlistId }, { merge: true });
+
+      dispatch({
+        type: actionTypes.SAVE_PLAYLIST,
+        payload: { ...playlist, id: playlistId },
+      });
+      console.log('***********Guardando perfil en Firebase:******************\n', playlistId);
+      console.log('***********documento:******************\n', docRef);
+
+    } catch (error) {
+      console.log('***********Error al guardar el perfil en Firebase:******************\n', error);
+      dispatch({
+        type: actionTypes.SET_ERROR,
+        payload: 'Error al guardar el playlist en Firebase.',
+      });
+    }
+  }
+
   const getSpotifyProfile = async () => {
     try {
       const accessToken = validateAccessToken();
@@ -115,6 +141,10 @@ export const useProfile = (dispatch) => {
       const ownPlaylists = playlists.items.filter(playlist => playlist.owner.id === UserId);
       const followedPlaylists = playlists.items.filter(playlist => playlist.owner.id !== UserId);
 
+    // Guardar cada playlist individualmente
+    for (const playlist of ownPlaylists) {
+      await savePlaylistFirebase(playlist);
+    }
       return { ownPlaylists, followedPlaylists };
 
     } catch (error) {

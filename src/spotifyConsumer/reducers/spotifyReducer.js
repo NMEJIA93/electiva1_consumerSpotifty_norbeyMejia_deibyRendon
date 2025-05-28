@@ -42,6 +42,13 @@ export const userProfileReducer = (state = {}, action) => {
         ...state,
         error: action.payload
       };
+
+        case actionTypes.SAVE_PLAYLIST:
+      return {
+        ...state,
+        //profile: state.profile.push(action.payload) en el video estaba asi por ser un arreglo 
+        playlist: action.payload
+      };
     default:
       return state;
   }

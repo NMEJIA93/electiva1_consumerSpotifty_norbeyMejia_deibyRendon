@@ -7,4 +7,5 @@ export const actionTypes = {
     SAVE_PROFILE: '[USER] Save Profile',
     UPDATE_PROFILE: '[USER] Save Profile',
     REMOVE_PROFILE: '[USER] Remove Profile',
+    SAVE_PLAYLIST: '[PLAYLIST] Save Playlist',
 }
