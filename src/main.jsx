@@ -3,13 +3,14 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { SpotifyApp } from './SpotifyApp'
 
+
 import './index.css'
 
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <BrowserRouter>
-      <SpotifyApp />
-    </BrowserRouter>
+      <BrowserRouter>
+        <SpotifyApp />
+      </BrowserRouter>
   </StrictMode>,
 )

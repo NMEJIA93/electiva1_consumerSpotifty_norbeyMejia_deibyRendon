@@ -3,30 +3,35 @@ import { useNavigate } from 'react-router-dom';
 import { exchangeCodeForToken } from '../../api/spotifyConsumer/auth/spotifyAuth';
 import { UserProfileContext } from '../../spotifyConsumer/contexts/UserProfileContext';
 import { UserContext } from '../../auth/context/UserContext';
+import { useManagementLocalStorage } from '../../hooks/useManagementLocalStorage'
 
 export const SpotifyCallback = () => {
   const navigate = useNavigate();
   const [error, setError] = useState(null);
 
-  const { getSpotifyProfile } = useContext(UserProfileContext);
+  const { getSpotifyProfile, saveProfileFirebase } = useContext(UserProfileContext);
   const { login } = useContext(UserContext);
 
-  
+  const { setLocalStorage } = useManagementLocalStorage();
+
+
   const processApiSpotifyCallback = async () => {
     try {
       const authorizationCode = extractAuthorizationCode();
       if (!authorizationCode) {
+        console.log('----error al traer code ------')
         throw new Error('No se recibió un código de autorización.');
       }
+      console.log('************entro en callback**********')
 
       const tokenData = await fetchTokenData(authorizationCode);
       await fetchAndSaveUserProfile(tokenData);
 
-      navigate('/userpage'); 
+      navigate('/userpage');
     } catch (error) {
       console.error('Error en el flujo de autenticación:', error);
       setError(error.message || 'Error al procesar la autenticación.');
-      navigate('/login'); 
+      navigate('/login');
     }
   };
 
@@ -38,9 +43,9 @@ export const SpotifyCallback = () => {
   const fetchTokenData = async (code) => {
     const token = await exchangeCodeForToken(code);
     if (token.access_token) {
-      localStorage.setItem('spotifyAccessToken', token.access_token);
-      localStorage.setItem('spotifyRefreshToken', token.refresh_token);
-      localStorage.setItem('spotifyTokenExpiration', Date.now() + token.expires_in * 1000);
+      setLocalStorage('spotifyAccessToken', token.access_token);
+      setLocalStorage('spotifyRefreshToken', token.refresh_token);
+      setLocalStorage('spotifyTokenExpiration', Date.now() + token.expires_in * 1000);
     }
     return token;
   };
@@ -48,17 +53,22 @@ export const SpotifyCallback = () => {
   const fetchAndSaveUserProfile = async (token) => {
     const userProfile = await getSpotifyProfile();
     saveUserProfileToLocalStorage(userProfile);
+
+    const userId = userProfile.uid || userProfile.id;
+    const profileToSave = { ...userProfile, uid: userId };
+    saveProfileFirebase(profileToSave);
     login(userProfile);
   };
-  
+
   const saveUserProfileToLocalStorage = (userProfile) => {
-    localStorage.setItem('userlogin', JSON.stringify(userProfile));
-    localStorage.setItem('logged', true);
+
+    setLocalStorage('userlogin', JSON.stringify(userProfile));
+    setLocalStorage('logged', true);
   };
 
   useEffect(() => {
     processApiSpotifyCallback();
-  }, []); 
+  }, []);
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-spotify-black text-white">
@@ -66,7 +76,7 @@ export const SpotifyCallback = () => {
         <ErrorDisplay error={error} navigate={navigate} />
       ) : (
         <div className="flex flex-col items-center">
-          <div className="w-12 h-12 border-4 border-spotify-green border-t-transparent rounded-full animate-spin"></div>
+          <div className="w-12 h-12 border-4 border-red-600 border-t-transparent rounded-full animate-spin"></div>
           <p className="text-lg mt-4">Cargando...</p>
         </div>
       )}

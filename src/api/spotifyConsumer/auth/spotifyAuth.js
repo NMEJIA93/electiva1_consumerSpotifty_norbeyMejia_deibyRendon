@@ -12,6 +12,7 @@ export const redirectToSpotifyLogin = async () => {
   const codeVerifier = generateCodeVerifier();
 
   localStorage.setItem('spotifyCodeVerifier', codeVerifier);
+  console.log('Codigo spotify--------------->', codeVerifier);
   const codeChallenge = await generateCodeChallenge(codeVerifier);
 
   const authUrl = `${SPOTIFY_AUTH_ENDPOINT}?client_id=${SPOTIFY_CLIENT_ID}&response_type=code&redirect_uri=${encodeURIComponent(
@@ -83,6 +84,106 @@ export const getSpotifyArtistsFollowers = async (accessToken) => {
 
   } catch (error) {
     console.error('Error al obtener los seguidores de los artistas:', error.response?.data || error.message);
+    throw error;
+  }
+}
+
+export const getSpotifyPlaylistsUser = async (accessToken) => {
+  try {
+    const response = await axios.get('https://api.spotify.com/v1/me/playlists', {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      }
+    });
+
+    return response.data;
+
+  } catch (error) {
+    console.error('Error al obtener las listas de reproducción del usuario:', error.response?.data || error.message);
+    throw error;
+  }
+}
+
+export const getSpotifyArtistTopUser = async (accessToken) => {
+  try {
+    const response = await axios.get('https://api.spotify.com/v1/me/top/artists', {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      }
+    });
+
+    return response.data;
+
+  } catch (error) {
+    console.error('Error al obtener los artistas más escuchados del usuario:', error.response?.data || error.message);
+    throw error;
+  }
+}
+export const getSpotifyTrackTopsUser = async (accessToken) => {
+  try {
+    const response = await axios.get('https://api.spotify.com/v1/me/player/recently-played', {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      }
+    });
+
+    return response.data;
+
+  } catch (error) {
+    console.error('Error al obtener las canciones más escuchadas del usuario:', error.response?.data || error.message);
+    throw error;
+  }
+}
+
+export const getTracks = async (accessToken, href) => {
+  try {
+    const response = await axios.get(href, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      }
+    });
+    
+    return response.data;
+
+  } catch (error) {
+    console.error('Error al obtener las canciones de la playlist:', error.response?.data || error.message);
+    throw error;
+  }
+}
+
+export const unfollowPlalist = async (accessToken, playlistId) => {
+  try {
+    const response = await axios.delete(`https://api.spotify.com/v1/playlists/${playlistId}/followers`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      }
+    });
+
+    return response.data;
+
+  } catch (error) {
+    console.error('Error al dejar de seguir la playlist:', error.response?.data || error.message);
+    throw error;
+  }
+}
+
+export const followPlaylist = async (accessToken, playlistId) => {
+  try {
+    const response = await axios.put(
+      `https://api.spotify.com/v1/playlists/${playlistId}/followers`,
+      { public: false }, // Cambia a false si quieres que sea privada
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          'Content-Type': 'application/json',
+        },
+      }
+    );
+
+    return response.data;
+
+  } catch (error) {
+    console.error('Error al seguir la playlist:', error.response?.data || error.message);
     throw error;
   }
 }

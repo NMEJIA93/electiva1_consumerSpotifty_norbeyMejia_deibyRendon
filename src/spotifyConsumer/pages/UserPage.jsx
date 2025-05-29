@@ -1,21 +1,20 @@
-import { useEffect, useState, useContext } from 'react';
+import { useContext } from 'react';
 
 import { PrivateNavbar } from '../components/PrivateNavbar'
 import { BodyUserPage } from '../components/BodyUserPage'
-import { userMock, ownPlaylists, sharedPlaylists } from '../../mocks/mocks'
-
+import { userMock, ownPlaylists, sharedPlaylists, dataPorfil } from '../../mocks/mocks'
+import { useTheme } from '../../hooks/useTheme';
 import { UserProfileContext } from '../contexts/UserProfileContext'
-
+import { UserContext } from '../../auth/context/UserContext'
 export const UserPage = () => {
-    //const { userState } = useContext(UserContext);
-    //console.log('Estado global del usuario:', userState);
-    //const { user, errorMessage: error } = userState;
 
 
     const { profileState } = useContext(UserProfileContext);
     const { profile, errorMessage: error } = profileState;
-    console.log('Estado global del perfil:', profileState);
+    const { isDarkMode } = useTheme();
 
+
+    const { loginWithSpotify } = useContext(UserContext);
 
 
     if (error) {
@@ -45,7 +44,7 @@ export const UserPage = () => {
             <div className="min-h-screen flex flex-col items-center justify-center bg-spotify-black text-white">
                 <div className="flex flex-col items-center">
                     {/* Spinner animado */}
-                    <div className="w-12 h-12 border-4 border-spotify-green border-t-transparent rounded-full animate-spin"></div>
+                    <div className="w-12 h-12 border-4 border-red-600 border-t-transparent rounded-full animate-spin"></div>
                     {/* Texto de carga */}
                     <p className="text-lg mt-4 text-spotify-gray">Cargando datos del usuario...</p>
                 </div>
@@ -55,26 +54,33 @@ export const UserPage = () => {
 
     const transformedUser = {
         firstName: profile.firstName || 'Usuario',
-        profilePicture: profile.profilePicture || '',
+        profilePicture: profile.profilePicture || userMock.profilePicture,
         email: profile.email || 'Correo no disponible',
         followers: profile.followers || 0,
         subscription: profile.subscription || 'free',
         profileLink: profile.profileLink || 'https://www.spotify.com',
         artistsFollowers: profile.artistsFollowers || [],
+        country: profile.country || 'No disponible',
+        ownPlaylists: profile.ownPlaylists || [],
+        followedPlaylists: profile.followedPlaylists || [],
+        connectWithSpotify: profile.connectWithSpotify || false,
+        favoriteGenres: profile.favoriteGenres || [],
+        artistsTop: profile.artistsTop || [],
+        tracksTop: profile.tracksTop || [],
     };
 
     return (
         <>
-            <div className="relative z-50">
+            <div className={`fixed top-0 left-0 right-0 z-50 ${isDarkMode ? 'bg-gray-900' : 'bg-white'} border-b ${isDarkMode ? 'border-gray-700' : 'border-gray-200'}`}>
                 <PrivateNavbar />
             </div>
-            <div
-                className="relative overflow-hidden min-h-screen bg-spotify-green "
-            >
+            <div className={`pt-16 min-h-screen ${isDarkMode ? 'bg-gray-900' : 'bg-white'}`}>
                 <BodyUserPage
                     user={transformedUser}
                     ownPlaylists={ownPlaylists}
                     sharedPlaylists={sharedPlaylists}
+                    dataPorfil={dataPorfil}
+                    loginWithSpotify={loginWithSpotify}
                 />
             </div>
         </>

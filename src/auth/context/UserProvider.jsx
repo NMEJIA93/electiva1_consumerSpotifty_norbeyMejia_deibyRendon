@@ -4,6 +4,8 @@ import { UserContext } from '../context/UserContext';
 import { useAuthenticate } from '../hooks/useAuthenticate';
 import { authTypes } from '../types/authTypes';
 import { UserProfileContext } from '../../spotifyConsumer/contexts/UserProfileContext';
+import { AuthContext } from '../context/UserContext';
+import { useManagementLocalStorage } from '../../hooks/useManagementLocalStorage'
 
 const authInitialState = {
     logged: false,
@@ -13,9 +15,9 @@ const authInitialState = {
 
 export const UserProvider = ({ children }) => {
     const [userState, dispatch] = useReducer(authReducer, authInitialState);
-    const { login, logout, loginWithSpotify,logoutWithSpotify } = useAuthenticate(dispatch);
+    const { login, logout, loginWithSpotify, logoutWithSpotify, handleGoogleCallback, onLoginWithFacebook, registerWithApp,loginWithApp } = useAuthenticate(dispatch);
     const [isLoading, setIsLoading] = useState(true);
-
+    const { clearLocalStorage } = useManagementLocalStorage();
 
     const initializeUserState = async () => {
         const storedUser = localStorage.getItem('userlogin');
@@ -37,12 +39,6 @@ export const UserProvider = ({ children }) => {
         }
     };
 
-
-    const clearLocalStorage = () => {
-        localStorage.removeItem('userlogin');
-        localStorage.removeItem('logged');
-    };
-
     useEffect(() => {
         const syncState = async () => {
             try {
@@ -50,7 +46,7 @@ export const UserProvider = ({ children }) => {
             } catch (error) {
                 console.error('Error al sincronizar el estado del usuario:', error);
             } finally {
-                setIsLoading(false); 
+                setIsLoading(false);
             }
         };
 
@@ -62,7 +58,7 @@ export const UserProvider = ({ children }) => {
             <div className="min-h-screen flex flex-col items-center justify-center bg-spotify-black text-white">
                 <div className="flex flex-col items-center">
                     {/* Spinner animado */}
-                    <div className="w-12 h-12 border-4 border-spotify-green border-t-transparent rounded-full animate-spin"></div>
+                    <div className="w-12 h-12 border-4 border-red-600 border-t-transparent rounded-full animate-spin"></div>
                     {/* Texto de carga */}
                     <p className="text-lg mt-4 text-spotify-gray">Cargando...</p>
                 </div>
@@ -72,10 +68,29 @@ export const UserProvider = ({ children }) => {
 
     return (
         <UserContext.Provider
-            value={{ userState, login, logout, loginWithSpotify,logoutWithSpotify }}
+            value={{ userState, login, logout, loginWithSpotify, logoutWithSpotify, handleGoogleCallback, onLoginWithFacebook, registerWithApp , loginWithApp }}
         >
             {children}
         </UserContext.Provider>
     );
 };
 
+
+
+export const AuthProvider = ({ children }) => {
+    const [user, setUser] = useState(null);
+
+    const login = (userData) => {
+        setUser(userData);
+    };
+
+    const logout = () => {
+        setUser(null);
+    };
+
+    return (
+        <AuthContext.Provider value={{ user, login, logout }}>
+            {children}
+        </AuthContext.Provider>
+    );
+};
