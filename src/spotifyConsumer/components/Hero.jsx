@@ -8,8 +8,10 @@ import {
   sharedPlaylists,
   dataPorfil,
 } from "../../mocks/mocks";
-import imageMock from "../../assets/bgImage.png";
+import imageMock from "../../assets/profileMock.png";
 import { useProfile } from "../hooks/useProfile";
+import usePlaylist from "../hooks/usePlaylist";
+
 export const Hero = () => {
   const [search, setSearch] = useState("");
   const [selectedPlaylist, setSelectedPlaylist] = useState(null);
@@ -21,10 +23,25 @@ export const Hero = () => {
   const { profileState, dispatch } = useContext(UserProfileContext);
   const { profile, errorMessage: error } = profileState;
   const spotifyAccessToken = localStorage.getItem("spotifyAccessToken");
-  const { setSpotifyTracksPlaylist, unfollowPlaylistAndRefresh, setProfile, followPlaylistAndRefresh } = useProfile(dispatch);
+  const {
+    setSpotifyTracksPlaylist,
+    unfollowPlaylistAndRefresh,
+    setProfile,
+    followPlaylistAndRefresh,
+  } = useProfile(dispatch);
+  const { playlists, loading } = usePlaylist();
 
-  console.log("Estado global del perfil:", profileState);
-  console.log("Perfil del usuario:", profile);
+  
+
+  // Estado para las playlists compartidas filtradas
+  const [filteredSharedPlaylists, setFilteredSharedPlaylists] = useState([]);
+
+  
+
+  // Usar playlists del perfil si están disponibles, sino usar los mocks
+  const userOwnPlaylists = profile?.ownPlaylists || ownPlaylists || [];
+  const userFollowedPlaylists = profile?.followedPlaylists || [];
+
   const [tracks, setTracks] = useState([]);
 
   const onSetTraks = async (token, href) => {
@@ -39,28 +56,38 @@ export const Hero = () => {
     }
   };
 
-  console.log("tracks en hero", tracks);
+  
 
+  // Filtrar playlists compartidas para eliminar duplicados
   useEffect(() => {
-    document.documentElement.classList.toggle("dark", isDarkMode);
-    localStorage.setItem("theme", isDarkMode ? "dark" : "light");
-  }, [isDarkMode]);
+    if (!loading && playlists) {
+      // Obtener IDs de playlists propias y seguidas
+      const ownPlaylistIds = userOwnPlaylists.map((p) => p.id);
+      const followedPlaylistIds = userFollowedPlaylists.map((p) => p.id);
 
-  if (!profile) return;
-  <div className="flex flex-col items-center">
-    <div className="w-12 h-12 border-4 border-red-700 border-t-transparent rounded-full animate-spin"></div>
-    <p className="text-lg mt-4">Cargando...</p>
-  </div>;
+      // Filtrar playlists compartidas que no estén en propias o seguidas
+      const filtered = playlists.filter(
+        (playlist) =>
+          !ownPlaylistIds.includes(playlist.id) &&
+          !followedPlaylistIds.includes(playlist.id)
+      );
 
-  // Usar playlists del perfil si están disponibles, sino usar los mocks
-  const userOwnPlaylists = profile?.ownPlaylists || ownPlaylists || [];
-  const userFollowedPlaylists = profile?.followedPlaylists || [];
-  const allSharedPlaylists = sharedPlaylists || [];
+      setFilteredSharedPlaylists(filtered);
+    }
+  }, [loading, playlists, userOwnPlaylists, userFollowedPlaylists]);
+
+  if (!profile)
+    return (
+      <div className="flex flex-col items-center">
+        <div className="w-12 h-12 border-4 border-red-700 border-t-transparent rounded-full animate-spin"></div>
+        <p className="text-lg mt-4">Cargando...</p>
+      </div>
+    );
 
   const allPlaylists = [
     ...userOwnPlaylists,
     ...userFollowedPlaylists,
-    ...allSharedPlaylists,
+    ...filteredSharedPlaylists,
   ];
 
   const filteredPlaylists = allPlaylists.filter((playlist) =>
@@ -76,10 +103,6 @@ export const Hero = () => {
     userFollowedPlaylists?.some((followed) => followed.id === playlist.id)
   );
 
-  const filteredSharedPlaylists = filteredPlaylists.filter((playlist) =>
-    allSharedPlaylists?.some((shared) => shared.id === playlist.id)
-  );
-
   // Mostrar solo las primeras 3 playlists si no está expandido
   const displayedOwnPlaylists = showAllOwnPlaylists
     ? filteredOwnPlaylists
@@ -88,7 +111,7 @@ export const Hero = () => {
   const displayedFollowedPlaylists = showAllFollowedPlaylists
     ? filteredFollowedPlaylists
     : filteredFollowedPlaylists.slice(0, 3);
-
+  console.log("playlist selccionada:", selectedPlaylist);
   return (
     <div
       className={`min-h-screen ${
@@ -407,7 +430,7 @@ export const Hero = () => {
                           } transition-colors duration-300 shadow-lg`}
                           onClick={(e) => {
                             e.stopPropagation();
-                            unfollowPlaylistAndRefresh(playlist.id)
+                            unfollowPlaylistAndRefresh(playlist.id);
                           }}
                         >
                           <svg
@@ -458,6 +481,7 @@ export const Hero = () => {
             )}
 
             {/* Recommended playlists section */}
+            {/* Recommended playlists section */}
             <section>
               <div className="flex items-center mb-4">
                 <h2
@@ -481,7 +505,14 @@ export const Hero = () => {
                 </span>
               </div>
 
-              {filteredSharedPlaylists.length > 0 ? (
+              {loading ? (
+                <div className="flex justify-center items-center p-8">
+                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
+                  <span className="ml-3">
+                    Cargando playlists recomendadas...
+                  </span>
+                </div>
+              ) : filteredSharedPlaylists.length > 0 ? (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                   {filteredSharedPlaylists.map((playlist) => (
                     <div
@@ -491,11 +522,20 @@ export const Hero = () => {
                           ? "bg-gray-800 hover:bg-gray-700 border border-gray-700"
                           : "bg-white hover:bg-blue-50 border border-gray-200 shadow-sm"
                       }`}
-                      onClick={() => setSelectedPlaylist(playlist)}
+                      onClick={() => {
+                        setSelectedPlaylist(playlist);
+                        onSetTraks(spotifyAccessToken, playlist.tracks.href);
+                      }}
                     >
                       <div className="relative">
                         <img
-                          src={playlist.cover}
+                          src={
+                            playlist.images &&
+                            playlist.images[0] &&
+                            playlist.images[0].url
+                              ? playlist.images[0].url
+                              : imageMock
+                          }
                           alt={playlist.name}
                           className="w-full h-40 object-cover"
                         />
@@ -520,7 +560,7 @@ export const Hero = () => {
                             onClick={(e) => {
                               e.stopPropagation();
                               // Lógica para añadir playlist
-                              followPlaylistAndRefresh(playlist.id)
+                              followPlaylistAndRefresh(playlist.id);
                             }}
                           >
                             <span className="text-xl font-bold">+</span>
@@ -543,14 +583,7 @@ export const Hero = () => {
                                 : "bg-blue-100 text-blue-800"
                             }`}
                           >
-                            {playlist.songs.length} canciones
-                          </span>
-                          <span
-                            className={
-                              isDarkMode ? "text-gray-400" : "text-gray-500"
-                            }
-                          >
-                            {playlist.followers} seguidores
+                            {playlist.tracks.total} canciones
                           </span>
                         </div>
                       </div>
@@ -594,9 +627,15 @@ export const Hero = () => {
                 <div className="relative">
                   <img
                     src={
-                      selectedPlaylist.cover
-                        ? selectedPlaylist.cover
-                        : selectedPlaylist.images[0].url
+                      selectedPlaylist.images &&
+                      Array.isArray(selectedPlaylist.images) &&
+                      selectedPlaylist.images[0] &&
+                      selectedPlaylist.images[0].url
+                        ? selectedPlaylist.images[0].url
+                        : typeof selectedPlaylist.images === "string" &&
+                          selectedPlaylist.images
+                        ? selectedPlaylist.images
+                        : imageMock
                     }
                     alt={selectedPlaylist.name}
                     className="w-full rounded-lg shadow-lg mb-4"
@@ -700,7 +739,9 @@ export const Hero = () => {
                   ) : tracks.length === 0 ? (
                     <div className="flex justify-center items-center p-6">
                       <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
-                      <span className="ml-3">Cargando canciones...</span>
+                      <span className="ml-3">
+                        No hay canciones en la playlist
+                      </span>
                     </div>
                   ) : (
                     <ul className="space-y-3">

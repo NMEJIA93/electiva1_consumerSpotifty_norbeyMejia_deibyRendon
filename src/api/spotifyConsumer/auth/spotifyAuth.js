@@ -169,12 +169,16 @@ export const unfollowPlalist = async (accessToken, playlistId) => {
 
 export const followPlaylist = async (accessToken, playlistId) => {
   try {
-    const response = await axios.put(`https://api.spotify.com/v1/playlists/${playlistId}/followers`, null, {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-        'Content-Type': 'application/json',
-      },
-    });
+    const response = await axios.put(
+      `https://api.spotify.com/v1/playlists/${playlistId}/followers`,
+      { public: false }, // Cambia a false si quieres que sea privada
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          'Content-Type': 'application/json',
+        },
+      }
+    );
 
     return response.data;
 
