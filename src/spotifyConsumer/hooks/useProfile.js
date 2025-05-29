@@ -312,7 +312,7 @@ const followPlaylistAndRefresh = async (playlistId) => {
 
 
 
-  return { getSpotifyProfile, setProfile, syncUserStateWithLocalStorage, saveProfileFirebase , unfollowPlaylistAndRefresh , followPlaylistAndRefresh };
+  return { getSpotifyProfile, setProfile, syncUserStateWithLocalStorage, saveProfileFirebase , unfollowPlaylistAndRefresh , followPlaylistAndRefresh , setSpotifyTracksPlaylist};
 
 };
 

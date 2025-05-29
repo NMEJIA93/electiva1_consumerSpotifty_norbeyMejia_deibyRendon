@@ -401,7 +401,7 @@ export const LoginPage = () => {
                     
                   </button>
                 </form>
-                <div className="mt-6">
+                {/* <div className="mt-6">
                   <div className="flex justify-center space-x-4">
                     <button
                       className="flex items-center justify-center bg-blue-600 text-white p-3 rounded-lg hover:bg-blue-700 transition w-full"
@@ -419,7 +419,7 @@ export const LoginPage = () => {
                       <i className="bi bi-spotify"></i>
                     </button>
                   </div>
-                </div>
+                </div> */}
                 <button
                   onClick={toggleRegister}
                   className={`mt-4 text-sm ${isDarkMode ? 'text-gray-400 hover:text-gray-300' : 'text-gray-500 hover:text-gray-700'} hover:underline`}
